@@ -1,0 +1,80 @@
+<%- include('../adminIncludes/adminHeader') %>
+
+    <div id="app">
+        <%- include('../adminIncludes/sidebar') %>
+
+            <div id="main">
+                <div class="page-heading">
+
+                    <section class="section">
+                        <div class="row" id="table-hover-row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex">
+                                        <div class=" w-100">
+                                        <h3 class="">Categories</h3>
+
+                                        </div>
+                                       
+                                        <div class="container-fluid w-100 my-auto">
+                                            <form action="/admin/addCategory" class="d-flex justify-content-end " method="post">                                     
+                                              <input type="text" class="border rounded " name="category" required>                                      
+                                              <button type="submit" class="ms-3 rounded border ">Add Category</button>                                       
+                                            </form>
+                                          </div>
+                                    </div>
+                                </div>
+
+                             
+
+                                    <div class="card">
+
+                                    <div class="card-content">
+                                        
+
+                                        <div class="mx-3 table-responsive">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>NO</th>
+                                                        <th>CATEGORY</th>
+                                                        <th>ACTION</th>
+                                                     
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% if(allCategories){ %>  
+                                                        <% let number=1 %>     
+                                                        <% for(category of allCategories){ %> 
+                                                            <tr>
+                                                                <td class="text-bold-500"><%=number  %> </td>
+                                                                <td class="text-bold-500"><%= category.categoryName  %></td>
+                                                                <td class="">
+                                                                    <a href="/admin/showSpecificCategory/<%=category._id%> " class="btn border">Show Products</a>
+                                                                    <a href="" class="btn border">Delete</a>
+                                                                </td>
+                                                            </tr>
+                                                            <% number++ %>
+                                                            <% } %>  
+                                                            <% } %>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div> 
+
+
+
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Hoverable rows end -->
+
+
+
+
+                </div>
+            </div>
+
+            <%- include('../adminIncludes/adminFooter') %>

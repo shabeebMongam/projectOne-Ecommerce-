@@ -1,0 +1,44 @@
+<footer>
+    <!-- <div class="footer clearfix mb-0 text-muted">
+        <div class="float-start">
+            <p>2022 &copy; DECOR</p>
+        </div>
+        <div class="float-end">
+            <p>Crafted with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
+                    href="">SHABEEB</a></p>
+        </div>
+    </div> -->
+</footer>
+</div>
+</div>
+<script>
+    function loopImage (files){
+
+        const totalImgs = files.length
+        
+
+        for(let i=0 ; i<totalImgs; i++){
+        let newImages = document.createElement("img")
+        newImages.setAttribute("src", window.URL.createObjectURL(files[i]));
+        newImages.setAttribute("height", "200px");
+        newImages.setAttribute("padding-right", "50px");
+        document.getElementById("viewingImg").appendChild(newImages);
+    }
+
+
+      
+    }
+   
+   
+
+</script>
+<script src="/adminStatic/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="/adminStatic/assets/js/bootstrap.bundle.min.js"></script>
+
+<script src="/adminStatic/assets/vendors/apexcharts/apexcharts.js"></script>
+<script src="/adminStatic/assets/js/pages/dashboard.js"></script>
+
+<script src="/adminStatic/assets/js/main.js"></script>
+</body>
+
+</html>

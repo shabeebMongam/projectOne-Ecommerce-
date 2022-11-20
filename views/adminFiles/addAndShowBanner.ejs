@@ -1,0 +1,154 @@
+<%- include('../adminIncludes/adminHeader') %>
+
+    <div id="app">
+        <%- include('../adminIncludes/sidebar') %>
+
+            <div id="main">
+                <div class="page-heading">
+
+
+                    <section class="section">
+                        <div class="row" id="table-hover-row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex">
+                                        <div class=" w-100">
+                                        <h3 class="">BANNERS</h3>
+
+                                        </div>
+                                       
+                                        <!-- <div class="container-fluid w-100 my-auto">
+                                            <form action="/admin/addCategory" class="d-flex justify-content-end " method="post">                                     
+                                              <input type="text" class="border rounded " name="category" required>                                      
+                                              <button type="submit" class="ms-3 rounded border ">Add Category</button>                                       
+                                            </form>
+                                          </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <section class="section ">
+                        <div class="row" id="table-hover-row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-content">
+
+                                        <!-- table hover -->
+                                        <div class="mx-3 table-responsive">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>IMAGE</th>
+                                                        <th>MAIN HEADING</th>
+                                                        <th>SUB HEADING</th>
+                                                        <th>DESCRIPTION</th>
+                                                        <th>ACTION</th>
+                                                  
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% for(banner of allBanners){ %>
+                                                        <tr>
+                                                            <td><img src="/commonStatic/productImages/<%=banner.bannerImage%> " alt="" style="width: 200px ;"></td>
+                                                            <td><%=banner.bannerMainHeading%></td>
+                                                            <td><%=banner.bannerSubHeading%></td>
+                                                            <td><%=banner.bannerDescription%></td>
+                                                            <td> <a href="/removeBanner/<%=banner._id%>" class="btn">Remove</a></td>
+                                                        </tr>
+                                                        <% } %> 
+                                                </tbody>
+                                               
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+
+
+                 
+
+                    <div class="card">
+                        <section id="multiple-column-form">
+                            <div class="row match-height">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                        <h4 class="card-title">ADD BANNER</h4>
+                                    </div>
+                                        <div class="card-content">
+                                            <div class="card-body">
+                                                <form class="form" action="/admin/addBanner" method="post" enctype="multipart/form-data">
+                                                    <div class="row">
+
+                                                        <div class="mb-3">
+                                                            <label for="formFileMultiple"
+                                                                class="form-label">Banner Image (800x800)
+                                                            </label>
+                                                            <input class="form-control" type="file"
+                                                                id="formFileMultiple" name="bannerImage" onchange="loopImage(this.files)" required />
+                                                        </div>
+                                                        <div class="col-md-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="first-name-column">Main Heading</label>
+                                                                <input type="text" id="first-name-column"
+                                                                    class="form-control"
+                                                                    name="bannerMainHeading" required/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6 col-12">
+                                                            <div class="form-group">
+                                                                <label for="first-name-column">Sub Heading</label>
+                                                                <input type="text" id="first-name-column"
+                                                                    class="form-control"
+                                                                    name="bannerSubHeading" required/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="w-100 ps-3 h-100">
+                                                            <div class="mt-1">
+                                                                <label
+                                                                    for="floatingTextarea2">Description</label>
+                                                                <textarea class="form-control"
+                                                                    id="floatingTextarea2"
+                                                                    style="height: 100px"
+                                                                    name="bannerDescription" required></textarea>
+                                                            </div>
+                                                        </div>
+
+                                                      
+                                                        <div id="viewingImg">
+                                                         
+                                                        </div>
+
+                                                        <div class="col-12 d-flex justify-content-end mt-4">
+                                                            <button type="submit"
+                                                                class="btn btn-primary me-1 mb-1">
+                                                                Submit
+                                                            </button>
+                                                            <button type="reset"
+                                                                class="btn btn-light-secondary me-1 mb-1">
+                                                                Reset
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!-- // Basic multiple Column Form section end -->
+                    </div>
+
+
+                </div>
+            </div>
+
+            <%- include('../adminIncludes/adminFooter') %>

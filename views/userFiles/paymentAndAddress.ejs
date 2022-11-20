@@ -1,0 +1,338 @@
+<%- include('../userIncludes/header') %>
+
+    </head>
+
+    <body>
+        <%- include('../userIncludes/nav') %>
+            <section class="h-100 gradient-custom" style="min-height: 80vh;">
+                <div class="container py-5">
+                    <form action="/testing" method="post" id="checkout-form">
+
+                        <div class="row d-flex justify-content-center my-4">
+
+                            <div class="col-md-8">
+                                <div class="card mb-4">
+                                    <div class="card-header py-3 mb-3 d-flex justify-content-between">
+                                        <h5 class="mb-0">Select a delivery address</h5>
+                                        <button class="btn border"> <a href="" class="">Add Address</a> </button>
+                                    </div>
+
+                                    <% for(address of savedAddress){ %>
+                                        <div class="card rounded-3 mb-4 mx-3">
+                                            <div class="card-body p-4">
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input " class="shippingAddress"
+                                                        type="radio" name="address"
+                                                        id="shippingAddress<%= address.name  %>"
+                                                        value="<%= address._id  %>" required />
+                                                    <label class="form-check-label"
+                                                        for="shippingAddress<%= address.name  %>">
+                                                        <p> <strong>
+                                                                <%= address.name %>
+                                                            </strong> <br>
+                                                            <%= address.address %> <br>
+                                                                <%= address.zipCode %> <br>
+                                                                    <%= address.mobileNumber %>
+                                                        </p>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <% } %>
+
+
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-4">
+
+                                <div class="card mb-4">
+                                    <div class="card-header py-3">
+                                        <h5 class="mb-0">Payment</h5>
+                                    </div>
+                                    <div class="card-body ">
+
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input paymentOption" type="radio" name="payment"
+                                                id="cashOnDelivery" value="cod" required />
+                                            <label class="form-check-label" for="cashOnDelivery">
+                                                Cash On Delivery (COD)
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                    <div class="card-body ">
+
+
+                                        <div class="form-check mb-2 ">
+                                            <input class="form-check-input paymentOption" type="radio" name="payment"
+                                                id="payOnline" value="online" required />
+                                            <label class="form-check-label" for="payOnline">
+                                                Pay Online
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+
+
+
+                                <div class="card mb-4">
+                                    <div class="card-header py-3">
+                                        <h5 class="mb-0">Summary</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <ul class="list-group list-group-flush">
+                                            <!-- <li
+                                                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                                Total number of items
+                                                <span>2</span>
+                                            </li> -->
+                                            <!-- <li
+                                            class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                            Subtotal
+                                            <span>Gratis</span>
+                                        </li> -->
+                                        <input type="text" name="cartTotal" value="<%= cartTotal %>" style="visibility: hidden;width:0px;height: 0px;">
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                                <div>
+                                                    <strong>Total amount</strong>
+                                                    <!-- <strong>
+                                                    <p class="mb-0">(including VAT)</p>
+                                                </strong> -->
+                                                </div>
+                                                <span><strong>
+                                                        <%= cartTotal %>
+                                                    </strong></span>
+                                            </li>
+                                        </ul>
+                                       
+                                        <button type="submit" class="btn btn-primary btn-lg btn-block"
+                                            onclick="checkingPaymentAndAddress()">
+                                            Place Order
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+
+                    <div class="card rounded-3 mb-4 mx-3" id="addingAddressForm">
+                        <div class="card-body p-4">
+
+                            <form action="/addAddress" method="post">
+
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        <div class="form-outline">
+                                            <input type="text" id="form7Example1" class="form-control"
+                                                placeholder="Name" name="name" required />
+                                            <!-- <label class="form-label" for="form7Example1">First name</label> -->
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-outline">
+                                            <input type="text" id="form7Example2" class="form-control"
+                                                placeholder="Mobile Number" name="mobileNumber" required />
+                                            <!-- <label class="form-label" for="form7Example2">Last name</label> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-4">
+                                    <div class="col">
+                                        <div class="form-outline">
+                                            <input type="text" id="form7Example1" class="form-control"
+                                                placeholder="Zip code" name="zipCode" required />
+                                            <!-- <label class="form-label" for="form7Example1">First name</label> -->
+                                        </div>
+                                        <div class="form-outline mt-4">
+                                            <input type="text" id="form7Example1" class="form-control"
+                                                placeholder="Alternate Mobile Number (optional)"
+                                                name="alternateMobileNumber" required />
+                                            <!-- <label class="form-label" for="form7Example1">First name</label> -->
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="form-outline mb-4">
+                                            <textarea class="form-control" id="form7Example7" rows="4"
+                                                placeholder="Address" name="address" required></textarea>
+                                            <!-- <label class="form-label" for="form7Example7">Additional information</label> -->
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class=" d-flex justify-content-end">
+                                    <button type="submit" class="btn border">Add new address</button>
+
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+
+
+
+
+
+            <%- include('../userIncludes/footer') %>
+
+
+                <!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
+
+                <script>
+
+
+
+
+                    function checkingPaymentAndAddress() {
+
+
+
+                        // if (document.getElementById('cashOnDelivery').checked) {
+
+                        $("#checkout-form").submit((e) => {
+                            e.preventDefault()
+                            $.ajax({
+                                url: '/orderPlaced',
+                                method: 'post',
+                                data: $('#checkout-form').serialize(),
+                                success: (response) => {
+                                    // console.log(response);
+                                    // alert(response)
+
+                                    if (response.paymentType === 'cod') {
+                                        console.log(response);
+                                        location.href = '/orderPlacedStatus'
+
+                                    } else if (response.paymentType === 'onlinePayment') {
+                                        // razorpayPayment(response)
+                                        console.log("Evide ethi");
+                                        console.log(response.order);
+                                    }
+                                }
+                            })
+                        })
+
+                        // console.log("COD");
+                        // } else if (document.getElementById('payOnline').checked) {
+
+
+                        //     $("#checkout-form").submit((e) => {
+                        //         e.preventDefault()
+                        //         $.ajax({
+                        //             url: '/orderPlacedOnlinePayment',
+                        //             method: 'post',
+                        //             data: $('#checkout-form').serialize(),
+                        //             success: (response) => {
+                        //                 // alert(response)  
+                        //                 // if (response != false) {
+                        //                 //     console.log(response);
+                        //                 //     razorpayPayment(response)
+
+
+                        //                     // location.href = '/onlinePayment'
+                        //                 }
+                        //             })
+                        //         })
+
+
+
+                        //     console.log("Online");
+                        // }
+
+
+
+                        function razorpayPayment(order) {
+                            console.log(order);
+                            var options = {
+                                "key": "rzp_test_nskbaOm2bho9QL", // Enter the Key ID generated from the Dashboard
+                                "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                "currency": "INR",
+                                "name": "Decor",
+                                "description": "Test Transaction",
+                                "image": "https://example.com/your_logo",
+                                "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                                // "callback_url": "https://eneqd3r9zrjok.x.pipedream.net/",
+                                "handler": function (response) {
+
+                                    // alert(response.razorpay_payment_id);
+                                    // alert(response.razorpay_order_id);
+                                    // alert(response.razorpay_signature)
+
+                                    verifyPayment(response, order);
+                                },
+                                "prefill": {
+                                    "name": "Gaurav Kumar",
+                                    "email": "gaurav.kumar@example.com",
+                                    "contact": "9999999999"
+                                },
+                                "notes": {
+                                    "address": "Razorpay Corporate Office"
+                                },
+                                "theme": {
+                                    "color": "#3399cc"
+                                }
+                            };
+                            var rzp1 = new Razorpay(options);
+                            rzp1.open();
+                        }
+
+
+                        function verifyPayment(payment, order) {
+                            console.log(payment);
+                            console.log("dsadas");
+                            console.log(order);
+                            $.ajax({
+                                url: '/verifyPayment',
+                                data: {
+                                    payment,
+                                    order
+                                },
+                                method: 'post'
+                            })
+                        }
+
+
+
+
+                        // const cod = document.getElementById("cashOnDelivery").getAttribute("value")
+                        // const online = document.getElementById("payOnline").getAttribute("value")
+
+                        // const datas = $('#checkout-form').serializeToJSON()
+                        // var formData = JSON.stringify(jQuery('#checkout-form').serializeArray());
+
+                        // console.log(formData)
+
+
+                        // console.log(formData[1]);
+
+                        // }
+                        // console.log(formData[0]);
+                        // const address = document.getElementsByName("address")
+                        // address.getAttribute("value");
+                        // const address = document.getElementById('shippingAddress')
+                        // const addVal = address.getAttribute("value")
+                        // console.log(address);
+                    }
+
+
+                </script>
+
+
+
+
+
+
+
+                <%- include('../userIncludes/bodyEnd') %>

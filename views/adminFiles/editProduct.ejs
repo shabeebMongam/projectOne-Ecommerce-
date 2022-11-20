@@ -1,0 +1,176 @@
+<%- include('../adminIncludes/adminHeader') %>
+
+    <div id="app">
+        <%- include('../adminIncludes/sidebar') %>
+
+            <div id="main">
+                <div class="page-heading">
+                    <section class="section">
+                        <div class="row" id="table-hover-row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h3 class="">EDIT PRODUCT</h3>
+                                    </div>
+
+                                    <!-- <div class="card-content"> -->
+
+                                    <!-- table hover -->
+                                    <!-- <div class="mx-3 table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>NAME</th>
+                                                    <th>NUMBER</th>
+                                                    <th>EMAIL</th>
+                                                    <th>STATUS</th>
+                                                    <th>ACTION</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="text-bold-500">EVEE</td>
+                                                    <td>7012429812</td>
+                                                    <td class="text-bold-500">newmail@gmail.com</td>
+                                                    <td>Have Access</td>
+                                                    <td><a href="" class="btn border">Deny Access</a></td>
+                                                    
+                                                </tr>
+                                               
+                                            </tbody>
+                                        </table>
+                                    </div> -->
+
+                                    <!-- </div> -->
+                                </div>
+
+                                <div class="card">
+                                    <section id="multiple-column-form">
+                                        <div class="row match-height">
+                                            <div class="col-12">
+                                                <div class="card">
+                                                    <!-- <div class="card-header">
+                                                    <h4 class="card-title">Multiple Column</h4>
+                                                </div> -->
+                                                    <div class="card-content">
+                                                        <div class="card-body">
+                                                         
+                                                            <form class="form" action="/admin/editProduct/<%=prodectTobeEdited._id%>" method="post" enctype="multipart/form-data">
+                                                                <div class="row">
+                                                                    <div class="col-md-6 col-12">
+                                                                        <div class="form-group">
+                                                                            <label for="first-name-column">Product
+                                                                                Name</label>
+                                                                            <input type="text" id="first-name-column"
+                                                                                class="form-control"
+                                                                                value="<%=prodectTobeEdited.productName%>"
+                                                                                placeholder="dadasdsas"
+                                                                                name="productName" required/>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-6 col-12 mt-4 ">
+                                                                        <div class="form-group">
+                                                                            <select id="category" name="productCategory" class="form-control"required>
+                                                                                <option value="<%=nameOfCategory._id%>"  selected><%=nameOfCategory.categoryName%> </option>
+                                                                                
+                                                                                <% if( allCategories.length> 0 ) { %>
+                                                                                    <% for( Category of allCategories ) { %>
+                                                                                       <%    if(Category.categoryName != nameOfCategory.categoryName){%>
+                                                                                          <option value="<%=Category._id%>"><%=Category.categoryName%></option>
+                                                                                       <%    }%>
+                                                                                <% } %>
+                                                                            <% } else { %>
+                                                                             No
+                                                                             <% }%>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+
+
+                                                                  
+
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <div class="w-100 pe-3">
+                                                                            <div class="col-12">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        for="city-column">Quantiy</label>
+                                                                                    <input type="text" id="city-column"
+                                                                                        class="form-control"
+                                                                                        value="<%=prodectTobeEdited.productQuantity%> "
+                                                                                        name="productQuantity" required/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-12">
+                                                                                <div class="form-group">
+                                                                                    <label
+                                                                                        for="country-floating">Price</label>
+                                                                                    <input type="text"
+                                                                                        id="country-floating"
+                                                                                        class="form-control"
+                                                                                        value="<%=prodectTobeEdited.productPrice%> "
+                                                                                        name="productPrice" required/>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="w-100 ps-3 h-100">
+                                                                            <div class="mt-1">
+                                                                                <label
+                                                                                    for="floatingTextarea2">Description</label>
+                                                                                <textarea class="form-control"
+                                                                                    id="floatingTextarea2"
+                                                                                    style="height: 100px"
+                                                                                    name="productDescription" required><%=prodectTobeEdited.productDescription%></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="mb-3">
+                                                                        <label for="formFileMultiple"
+                                                                            class="form-label">Upload Images (900x900)
+                                                                        </label>
+
+                                                                        <input class="form-control" type="file"
+                                                                            id="formFileMultiple" name="productImages" multiple required />
+                                                                    </div>
+                                                                    <div>
+                                                                        <% for (singleImg of prodectTobeEdited.productImages ){  %>   
+                                                                            <img src="/commonStatic/productImages/<%=singleImg%>"
+                                                                            style="height:200px ; padding: 5px;" alt="" class="imgView">
+                                                                     <% } %> 
+                                                                    </div>
+                                                                 
+
+                                                                    <div class="col-12 d-flex justify-content-end">
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary me-1 mb-1">
+                                                                            Submit
+                                                                        </button>
+                                                                        <!-- <button type="reset"
+                                                                            class="btn btn-light-secondary me-1 mb-1">
+                                                                            Reset
+                                                                        </button> -->
+                                                                    </div>
+                                                                </div>
+                                                            </form>
+                                                       
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <!-- // Basic multiple Column Form section end -->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Hoverable rows end -->
+                </div>
+            </div>
+    </div>
+
+    <%- include('../adminIncludes/adminFooter') %>

@@ -1,0 +1,82 @@
+<%- include('../adminIncludes/adminHeader') %>
+
+    <div id="app">
+        <%- include('../adminIncludes/sidebar') %>
+
+            <div id="main">
+                <div class="page-heading">
+
+                    <section class="section ">
+                        <div class="row" id="table-hover-row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex justify-content-between">
+                                        <h3 class="">Products List</h3>
+                                        <a href="/admin/addProduct" class="btn border my-auto bg-success text-light">
+                                            ADD PRODUCT</a>
+                                    </div>
+
+                                    <div class="card-content">
+
+                                        <!-- table hover -->
+                                        <div class="mx-3 table-responsive">
+                                            <table class="table table-hover mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>NO</th>
+                                                        <th>IMAGE</th>
+                                                        <th>NAME</th>
+                                                        <th>PRICE</th>
+                                                        <th>QUANTITY</th>
+                                                        <th>ACTIONS</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% if(allProducts){ %>
+                                                        <% let number=1 %>
+                                                            <% for(product of allProducts){ %>
+                                                                <tr>
+
+                                                                    <td class="text-bold-500">
+                                                                        <%=number%>
+                                                                    </td>
+                                                                    <td ><img style="width: 150px;width: 200px;" src="/commonStatic/productImages/<%=product.productImages[0]%>"
+                                                                            alt=""></td>
+                                                                    <td >
+                                                                        <%=product.productName%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%=product.productPrice%>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%=product.productQuantity%>
+                                                                    </td>
+                                                                    <td class="">
+                                                                        <form action="/admin/editProduct/<%= product._id %> ">
+                                                                            <button class="submit btn border border-dark btn-warning text-dark" style="width: 80px ;">Edit</button>
+                                                                        </form>
+                                                                        <form action="/admin/deleteProduct/<%= product._id %>" method="post" class="mt-2">
+                                                                            <button class="submit btn border border-dark btn-danger text-dark"style="width: 80px ;">Delete</button>
+                                                                        </form>
+                                                                    </td>
+                                                                </tr>
+                                                                <% number++ %>
+
+                                                                    <% } %>
+                                                                        <% } %>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <!-- Hoverable rows end -->
+
+
+
+
+                </div>
+            </div>

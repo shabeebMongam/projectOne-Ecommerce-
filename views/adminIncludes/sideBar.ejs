@@ -1,0 +1,108 @@
+<div id="sidebar" class="active">
+    <div class="sidebar-wrapper active">
+        <div class="sidebar-header">
+            <div class="d-flex justify-content-between">
+                <div class="logo">
+                    <h3 style="  font-size: 70px;
+                    font-weight: 500;
+                    color: #553c9a;
+                    border-right: 4px solid #000; /*This will be the blinking cursor*/">Decor Admin</h3>
+                    <!-- <a href="/admin"><img src="/adminStatic/assets/images/logo/logo.png" alt="Logo" srcset=""></a> -->
+                </div>
+                <div class="toggler">
+                    <a href="#" class="sidebar-hide d-xl-none d-block"><i class="bi bi-x bi-middle"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar-menu">
+            <ul class="menu">
+                <li class="sidebar-title">Menu</li>
+                <% if(dashboard ){ %>
+                    <li class="sidebar-item active ">
+                        <a href="/admin/showDashboard" class='sidebar-link'>
+                            <i class="bi bi-grid-fill"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <% }else{ %>
+                        <li class="sidebar-item  ">
+                            <a href="/admin/showDashboard" class='sidebar-link'>
+                                <i class="bi bi-grid-fill"></i>
+                                <span>Dashboard</span>
+                            </a>
+                        </li>
+                        <% } %>
+
+
+                            <% if(users){ %>
+                                <li class="sidebar-item active ">
+                                    <a href="/admin/showUsers" class='sidebar-link'>
+                                        <i class="bi bi-people-fill"></i>
+                                        <span>Users</span>
+                                    </a>
+                                </li>
+                                <% }else{ %>
+                                    <li class="sidebar-item  ">
+                                        <a href="/admin/showUsers" class='sidebar-link'>
+                                            <i class="bi bi-people-fill"></i>
+                                            <span>Users</span>
+                                        </a>
+                                    </li>
+                                    <% } %>
+
+
+                                        <% if(products){ %>
+                                            <li class="sidebar-item active ">
+                                                <a href="/admin/showProducts" class='sidebar-link'>
+                                                    <i class="bi bi-save"></i>
+                                                    <span>Products</span>
+                                                </a>
+                                            </li>
+                                            <% }else{ %>
+                                                <li class="sidebar-item  ">
+                                                    <a href="/admin/showProducts" class='sidebar-link'>
+                                                        <i class="bi bi-save"></i>
+                                                        <span>Products</span>
+                                                    </a>
+                                                </li>
+                                                <% } %>
+
+
+
+                                                    <% if(category){ %>
+                                                        <li class="sidebar-item active">
+                                                            <a href="/admin/showCategory" class='sidebar-link'>
+                                                                <i class="bi bi-back"></i>
+                                                                <span>Category</span>
+                                                            </a>
+                                                        </li>
+                                                        <% }else{ %>
+                                                            <li class="sidebar-item  ">
+                                                                <a href="/admin/showCategory" class='sidebar-link'>
+                                                                    <i class="bi bi-back"></i>
+                                                                    <span>Category</span>
+                                                                </a>
+                                                            </li>
+                                                            <% } %>
+                                                            <% if(banner){ %>
+                                                                <li class="sidebar-item active">
+                                                                    <a href="/admin/addBanner" class='sidebar-link'>
+                                                                        <i class="bi bi-back"></i>
+                                                                        <span>Banner</span>
+                                                                    </a>
+                                                                </li>
+                                                                <% }else{ %>
+                                                                    <li class="sidebar-item  ">
+                                                                        <a href="/admin/addBanner" class='sidebar-link'>
+                                                                            <i class="bi bi-back"></i>
+                                                                            <span>Banner</span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <% } %>
+
+
+            </ul>
+        </div>
+        <button class="sidebar-toggler btn x"><i data-feather="x"></i></button>
+    </div>
+</div>

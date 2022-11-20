@@ -1,0 +1,79 @@
+<%- include('../userIncludes/header') %>
+
+  <link rel="stylesheet" href="/commonStatic/registerCSS.css">
+
+  </head>
+
+  <body>
+
+
+    <section class="h-100 h-custom" style="background-color: lightblue;">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-lg-8 col-xl-6">
+            <div class="card rounded-3" style="background-color:whitesmoke">
+              <img src="/userStatic/assets/img/userSignInSignUpBanner.png" class="w-100"
+                style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;" alt="Sample photo">
+              <div class="card-body p-4 p-md-5">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">REGISTER</h3>
+
+
+
+                <form class="px-md-2" method="post" action="/register">
+                  <% for(eachErrMsg of validation) { %>
+
+                    <p class="border p-2 bg-danger rounded text-light">
+                      <%=eachErrMsg %>
+                    </p>
+
+                    <% } %>
+
+                      <% for(exist of numberExist){ %>
+                        <p class="border p-2 bg-danger rounded text-light">
+                          <%=exist %>
+                        </p>
+
+                        <% } %>
+
+                          <div class="form-outline mb-4">
+                            <label class="form-label" for="nameUser">Name</label>
+                            <input type="text" id="nameUser" name="name" class="form-control" />
+                          </div>
+                          <div class="form-outline mb-4">
+                            <label class="form-label" for="numberUser">Mobile Number</label>
+                            <input type="text" id="numberUser" name="number" class="form-control" />
+                          </div>
+                          <!-- <div class="" style="visibility: hidden;   width: 0px; height: 0px;">
+                    <input type="text" name="otp" placeholder="Enter OTP" >
+                    <button class="btn btn-info btn-sm">Verify</button>
+                </div> -->
+                          <div class="form-outline mb-4">
+                            <label class="form-label" for="passwordUser">Password</label>
+                            <input type="password" id="passwordUser" name="password" class="form-control" />
+                          </div>
+
+
+
+                          <div>
+                            <button type="submit" class="btn btn-success  mb-1 ">Register</button>
+                            <p>Already have an account <span><a href="/login">Login</a></span></p>
+
+                          </div>
+
+                </form>
+
+              </div>
+            </div>
+            <a href="/">DECOR</a>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+
+
+
+
+    <%- include('../userIncludes/bodyEnd') %>

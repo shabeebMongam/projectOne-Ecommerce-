@@ -1,0 +1,79 @@
+<%- include('../adminIncludes/adminHeader') %>
+
+    <div id="app">
+        <%- include('../adminIncludes/sidebar') %>
+
+        <div id="main">
+            <div class="page-heading">
+
+                <section class="section">
+                    <div class="row" id="table-hover-row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="">Users List</h3>
+                                </div>
+                                
+                                <div class="card-content">
+                                   
+                                    <!-- table hover -->
+                                    <div class="mx-3 table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>NAME</th>
+                                                    <th>NUMBER</th>
+                                                    <th>EMAIL</th>
+                                                    <th>STATUS</th>
+                                                    <th>ACTION</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                              <% if(allUsers){ %>   
+                                                   <% for(user of allUsers){ %>  
+                                                        <tr>
+                                                            <td class="text-bold-500"> <%=user.name %></td>
+                                                            <td><%=user.mobileNumber%>  </td>
+                                                           <% if(user.email){ %>  
+                                                                <td class="text-bold-500"><%=user.email%></td>
+                                                           <% }else{ %>  
+                                                                <td class="text-bold-500">No email provided</td>
+                                                           <% } %>  
+                                                           <% if(user.access){ %>  
+                                                            <td > <span class="text-dark bg-success p-1 ">Have Access</span> </td>
+                                                           <% }else{ %>  
+                                                            <td><span class="text-dark bg-danger p-1">Have No Access</span></td>
+                                                           <% } %>  
+                                                            <td class="text-start">
+                                                                
+                                                                <%  if(user.access === true){ %>
+                                                                    <div class="d-flex align-items-center justify-content-start">
+                                      
+                                                                      <a href="/admin/block/<%=user._id%>" class="btn btn-info">Deny Access</a>
+                                                                    </div>
+                                                                 <% }else{ %>
+                                                                     <div class="d-flex align-items-center justify-content-start  ms-3">
+                                                                      <a href="/admin/unBlock/<%=user._id%>" class="btn btn-info">Give Access</a>
+                                                                    </div>
+                                                                 <% } %>  
+                                                                
+                                                                
+                                                            
+                                                        </tr>
+                                                   <% } %>  
+                                               <% } %>                                               
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Hoverable rows end -->
+
+
+
+
+            </div>
+        </div>
