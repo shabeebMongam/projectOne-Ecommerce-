@@ -21,36 +21,52 @@
             <section class="h-100 gradient-custom " style="min-height: 90vh;">
                 <div class="container py-5">
                     <div class="row d-flex justify-content-center my-4">
-                        <div class="col-md-12">
+                        <div class="col-md-12 ">
 
 
 
-                            <div class="card mb-4">
+                            <div class="card mb-4 ">
+                                <div class="mb-4 mx-3 mt-4">
+                                    <h4>ORDER HISTORY </h4>
+                                </div>
 
 
-                                <% for(order of userOrders[0].orders){ %>
+                                <% for(order of userOrders){ %>
 
-                                   
-                                    <div class="card rounded-3 mb-4 mx-3">
 
-                                        <div class="ms-4 mt-3">
-                                            <h6>Order Id : <%=order._id  %> </h6>
-                                        </div> 
-                                        <% for(product of order.products){ %>
+                                    <div class="card rounded-3 mb-4 mx-3 "
+                                        style="background-color: rgb(242, 248, 248);">
 
-                                            
+                                        <div class="ms-4 mt-3 d-flex justify-content-between">
+                                            <h6>Order Id : <%=order._id %>
+                                            </h6>
+                                            <h6 class="me-3"> Order Placed On : <%=
+                                                    order.orders.orderedDate.toLocaleDateString()%>
+                                            </h6>
+
+                                        </div>
+
+                                        <% for(product of order.orders.products){ %>
+
+
                                             <div class="card-body p-4">
                                                 <div class="row d-flex justify-content-between align-items-center">
-                                                    
+
                                                     <div class="col-md-2 col-lg-2 col-xl-2 ">
                                                         <img src="/commonStatic/productImages/<%=product.productImages[0]  %> "
                                                             class="img-fluid rounded-3" alt="Cotton T-shirt">
                                                     </div>
                                                     <div class="col-md-3 col-lg-3 col-xl-3 ">
-                                                        <p class="lead fw-normal mb-2"><%=product.productName%> </p>
-                                                        <p><span class="text-muted">Quantity: <%=product.productQuantity%> </p> 
-                                                        <p><span class="text-muted">Total : <%- product.productQuantity * product.productPrice %>  </p>
-                                                        
+                                                        <p class="lead fw-normal mb-2">
+                                                            <%=product.productName%>
+                                                        </p>
+                                                        <p><span class="text-muted">Quantity:
+                                                                <%=product.productQuantity%>
+                                                        </p>
+                                                        <p><span class="text-muted">Total : <%- product.productQuantity
+                                                                    * product.productPrice %>
+                                                        </p>
+
                                                     </div>
                                                     <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                                                         <!-- <button class="btn btn-link px-2"
@@ -70,7 +86,7 @@
 
                                                     </div>
                                                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                                        <h5 class="mb-0" id="_total"></h5>
+                                                        <h5 class="mb-0" id="_total"> </h5>
                                                     </div>
                                                     <!-- <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                                         <a href="/removeItemFromCart/" class="text-danger"><i
@@ -81,6 +97,12 @@
 
                                             <% } %>
 
+                                                <div class="d-flex justify-content-end me-5 mb-4">
+                                                    <h5>
+                                                        Status : <%= order.orders.status %>
+                                                    </h5>
+
+                                                </div>
 
                                     </div>
 

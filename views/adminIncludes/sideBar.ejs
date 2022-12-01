@@ -84,21 +84,41 @@
                                                                 </a>
                                                             </li>
                                                             <% } %>
-                                                            <% if(banner){ %>
-                                                                <li class="sidebar-item active">
-                                                                    <a href="/admin/addBanner" class='sidebar-link'>
-                                                                        <i class="bi bi-back"></i>
-                                                                        <span>Banner</span>
-                                                                    </a>
-                                                                </li>
-                                                                <% }else{ %>
-                                                                    <li class="sidebar-item  ">
+                                                                <% if(banner){ %>
+                                                                    <li class="sidebar-item active">
                                                                         <a href="/admin/addBanner" class='sidebar-link'>
-                                                                            <i class="bi bi-back"></i>
+                                                                            <i class="bi bi-aspect-ratio"></i>
                                                                             <span>Banner</span>
                                                                         </a>
                                                                     </li>
-                                                                    <% } %>
+                                                                    <% }else{ %>
+                                                                        <li class="sidebar-item  ">
+                                                                            <a href="/admin/addBanner"
+                                                                                class='sidebar-link'>
+                                                                                <i class="bi bi-aspect-ratio"></i>
+                                                                                <span>Banner</span>
+                                                                            </a>
+                                                                        </li>
+                                                                        <% } %>
+                                                                            <% if(order){ %>
+                                                                                <li class="sidebar-item active">
+                                                                                    <a href="/admin/showOrder"
+                                                                                        class='sidebar-link'>
+                                                                                        <i class="bi bi-archive"></i>
+                                                                                        <span>Order</span>
+                                                                                    </a>
+                                                                                </li>
+                                                                                <% }else{ %>
+                                                                                    <li class="sidebar-item  ">
+                                                                                        <a href="/admin/showOrder"
+                                                                                            class='sidebar-link'>
+                                                                                            <i
+                                                                                                class="bi bi-archive"></i>
+                                                                                            <span>Order</span>
+                                                                                        </a>
+                                                                                    </li>
+                                                                                    <% } %>
+
 
 
             </ul>

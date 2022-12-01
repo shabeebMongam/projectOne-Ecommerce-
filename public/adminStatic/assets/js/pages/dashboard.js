@@ -16,7 +16,7 @@ var optionsProfileVisit = {
 	},
 	series: [{
 		name: 'sales',
-		data: [9,20,30,20,10,20,30,20,10,20,30,20]
+		data: [9,20,30,20,10,20,30,20,10,20,30,100]
 	}],
 	colors: '#435ebe',
 	xaxis: {

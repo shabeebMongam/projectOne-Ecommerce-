@@ -14,12 +14,12 @@
                                 <div class="card mb-4">
                                     <div class="card-header py-3 mb-3 d-flex justify-content-between">
                                         <h5 class="mb-0">Select a delivery address</h5>
-                                        <button class="btn border"> <a href="" class="">Add Address</a> </button>
+                                        <!-- <button class="btn border"> <a href="" class="">Add Address</a> </button> -->
                                     </div>
 
                                     <% for(address of savedAddress){ %>
                                         <div class="card rounded-3 mb-4 mx-3">
-                                            <div class="card-body p-4">
+                                            <div class="card-body p-4 d-flex justify-content-between">
                                                 <div class="form-check mb-2">
                                                     <input class="form-check-input " class="shippingAddress"
                                                         type="radio" name="address"
@@ -35,6 +35,10 @@
                                                                     <%= address.mobileNumber %>
                                                         </p>
                                                     </label>
+                                                </div>
+                                                <div>
+                                                    <a href="/removeAddress/<%=address  ._id%>"
+                                                        class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
                                                 </div>
 
                                             </div>
@@ -188,7 +192,7 @@
             <%- include('../userIncludes/footer') %>
 
 
-                <!-- <script src="https://checkout.razorpay.com/v1/checkout.js"></script> -->
+                <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
                 <script>
 
@@ -216,7 +220,7 @@
                                         location.href = '/orderPlacedStatus'
 
                                     } else if (response.paymentType === 'onlinePayment') {
-                                        // razorpayPayment(response)
+                                        razorpayPayment(response.order)
                                         console.log("Evide ethi");
                                         console.log(response.order);
                                     }
@@ -224,40 +228,13 @@
                             })
                         })
 
-                        // console.log("COD");
-                        // } else if (document.getElementById('payOnline').checked) {
-
-
-                        //     $("#checkout-form").submit((e) => {
-                        //         e.preventDefault()
-                        //         $.ajax({
-                        //             url: '/orderPlacedOnlinePayment',
-                        //             method: 'post',
-                        //             data: $('#checkout-form').serialize(),
-                        //             success: (response) => {
-                        //                 // alert(response)  
-                        //                 // if (response != false) {
-                        //                 //     console.log(response);
-                        //                 //     razorpayPayment(response)
-
-
-                        //                     // location.href = '/onlinePayment'
-                        //                 }
-                        //             })
-                        //         })
-
-
-
-                        //     console.log("Online");
-                        // }
-
-
+            
 
                         function razorpayPayment(order) {
                             console.log(order);
                             var options = {
                                 "key": "rzp_test_nskbaOm2bho9QL", // Enter the Key ID generated from the Dashboard
-                                "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                                "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
                                 "currency": "INR",
                                 "name": "Decor",
                                 "description": "Test Transaction",
@@ -299,31 +276,17 @@
                                     payment,
                                     order
                                 },
-                                method: 'post'
+                                method: 'post',
+                                success:(response)=>{
+                                    if(response.status){
+                                        location.href = '/orderPlacedStatus'
+                                    }else{
+                                        alert("Payment failed")
+                                    }
+                                }
                             })
                         }
 
-
-
-
-                        // const cod = document.getElementById("cashOnDelivery").getAttribute("value")
-                        // const online = document.getElementById("payOnline").getAttribute("value")
-
-                        // const datas = $('#checkout-form').serializeToJSON()
-                        // var formData = JSON.stringify(jQuery('#checkout-form').serializeArray());
-
-                        // console.log(formData)
-
-
-                        // console.log(formData[1]);
-
-                        // }
-                        // console.log(formData[0]);
-                        // const address = document.getElementsByName("address")
-                        // address.getAttribute("value");
-                        // const address = document.getElementById('shippingAddress')
-                        // const addVal = address.getAttribute("value")
-                        // console.log(address);
                     }
 
 

@@ -78,7 +78,7 @@
                                                                                     <% for( Category of allCategories ) { %>
                                                                                        <%    if(Category.categoryName != nameOfCategory.categoryName){%>
                                                                                           <option value="<%=Category._id%>"><%=Category.categoryName%></option>
-                                                                                       <%    }%>
+                                                                                       <% }%>
                                                                                 <% } %>
                                                                             <% } else { %>
                                                                              No

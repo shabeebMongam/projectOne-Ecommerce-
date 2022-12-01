@@ -1,5 +1,5 @@
-  <!-- Start Top Nav -->
-  <!-- <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
+<!-- Start Top Nav -->
+<!-- <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
     <div class="container text-light">
         <div class="w-100 d-flex justify-content-between">
             <div>
@@ -47,14 +47,15 @@
                         <a class="nav-link" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> <del> About </del></a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="/shop">Shop</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> <del> Contact </del></a>
+                        <a class="nav-link" href="/about"> About </a>
                     </li>
+
+                    <!-- <li class="nav-item">
+                        <a class="nav-link" href="#"> <del> Contact </del></a>
+                    </li> -->
                 </ul>
             </div>
             <div class="navbar align-self-center d-flex">
@@ -66,10 +67,10 @@
                         <button type="button" class="btn btn-success dropdown-toggle " data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <i class="bi bi-person"></i>
-                                    
+
                             <% if(usersName){ %>
                                 <%=usersName %>
-                                <% } %>
+                                    <% } %>
                         </button>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="/profile">Profile</a></li>
@@ -78,7 +79,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#" >Logout</a></li>
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
                         </ul>
                     </div>
 
@@ -91,7 +92,10 @@
                     <a class="nav-icon position-relative text-decoration-none" href="/cart ">
                         <i class="fa fa-fw fa-cart-arrow-down text-success mr-1 fs-4"></i>
                         <span
-                            class="position-absolute top-0 left-100 translate-middle badge bg-info rounded-circle px-2 m-0 text-dark"><%=cartLength%></span>
+                            class="position-absolute top-0 left-100 translate-middle badge bg-info rounded-circle px-2 m-0 text-dark"
+                            id="cartLength">
+                            <%=cartLength%>
+                        </span>
                     </a>
 
 

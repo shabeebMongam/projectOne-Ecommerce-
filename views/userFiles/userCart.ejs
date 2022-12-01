@@ -244,9 +244,9 @@
                                     </ul>
 
                                     <!-- <button type="button" class="btn btn-primary btn-lg btn-block"> -->
-                                    <form action="/selectAddressAndPayment" method="post">
-                                        <input id="formTotalPrice" type="text" value="<%= totalPrice  %>"
-                                            style="visibility:hidden;width:0px;height:0px" name="cartTotal">
+                                    <form action="/selectAddressAndPayment/<%= totalPrice  %>" method="get">
+                                        <!-- <input id="formTotalPrice" type="text" value="<%= totalPrice  %>"
+                                            style="visibility:hidden;width:0px;height:0px" name="cartTotal"> -->
 
                                             <button type="submit" class="text-light btn border bg-success">Proceed To Buy</button>
                                     </form>
@@ -288,7 +288,7 @@
                         if ( parseInt(quantity.innerHTML) === 2 && count == -1 ){
                            console.log( document.getElementById("negativeBtn"));
                            
-                           document.getElementById("negativeBtn").setAttribute("style","visibility: hidden")
+                           document.getElementById("negativeBtn" ).setAttribute("style","visibility: hidden")
                            
                         //    document.getElementById("negativeBtn").setAttribute("disabled" , true)
                         }else{

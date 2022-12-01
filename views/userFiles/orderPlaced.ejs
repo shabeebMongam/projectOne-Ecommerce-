@@ -1,9 +1,211 @@
 <%- include('../userIncludes/header') %>
-</head>
-<body>
-<%- include('../userIncludes/nav') %>
+    <script src="https://unpkg.com/easyinvoice/dist/easyinvoice.min.js"></script>
+    </head>
 
-<div class="" style="height: 90vh ;">
+    <body>
+        <%- include('../userIncludes/nav') %>
+
+
+
+            <section class="h-100 gradient-custom">
+                <div class="container py-5 h-100">
+
+                    <div class="row d-flex justify-content-center align-items-center h-100">
+
+                        <div class="col-lg-10 col-xl-8">
+                            <div class="d-flex justify-content-end mb-5 ">
+                                <a href="/shop" class="btn border">Cotinue Shopping</a>
+                            </div>
+                            <div class="card" style="border-radius: 10px;">
+                                <div class="card-header px-4 py-5">
+                                    <h3 class="text-muted mb-0">We've got your order, <span
+                                            style="color: #a8729a;">User</span></h3>
+                                    <p class="mt-2 ">We'll let you know once we pack your product</p>
+                                </div>
+                                <div class="card-body p-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <p class="lead fw-normal mb-0" style="color: #a8729a;">Receipt</p>
+                                        <p class="small text-muted mb-0">Order Id : <%= detailesOfLastOrderOfUser._id %>
+                                        </p>
+                                    </div>
+
+                                    <% let totalPrice=0 %>
+
+                                        <% for(product of detailesOfLastOrderOfUser.products ){ %>
+                                            <div class="card shadow-0 border mb-4">
+                                                <div class="card-body">
+                                                    <div class="row">
+                                                        <div class="col-md-2">
+                                                            <img src="/commonStatic/productImages/<%=product.productImages[0]%> "
+                                                                class="img-fluid" alt="">
+                                                        </div>
+                                                        <div
+                                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                            <p class="text-muted mb-0">
+                                                                <%=product.productName%>
+                                                            </p>
+                                                        </div>
+                                                        <div
+                                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                            <p class="text-muted mb-0 small">
+                                                                <%=product.productPrice%>
+                                                            </p>
+                                                        </div>
+                                                        <div
+                                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                            <p class="text-muted mb-0 small">
+                                                                Qty: <%=product.productQuantity%>
+                                                            </p>
+                                                        </div>
+                                                        <!-- <div
+                                                        class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                        <p class="text-muted mb-0 small"> 1</p>
+                                                    </div> -->
+                                                        <div
+                                                            class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                            <p class="text-muted mb-0 small">Total :
+                                                                <%-product.productPrice * product.productQuantity %>
+                                                            </p>
+
+                                                        </div>
+                                                        <% totalPrice=totalPrice + (product.productQuantity *
+                                                            product.productPrice) %>
+                                                    </div>
+                                                    <!-- <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;"> -->
+                                                    <!-- <div class="row d-flex align-items-center">
+                                                        <div class="col-md-2">
+                                                            <p class="text-muted mb-0 small">Track Order</p>
+                                                        </div>
+                                                        <div class="col-md-10">
+                                                            <div class="progress" style="height: 6px; border-radius: 16px;">
+                                                                <div class="progress-bar" role="progressbar"
+                                                                    style="width: 65%; border-radius: 16px; background-color: #a8729a;"
+                                                                    aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-around mb-1">
+                                                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary
+                                                                </p>
+                                                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+                                                            </div>
+                                                        </div>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+
+
+
+                                            <% } %>
+
+
+                                                <!-- <div class="card shadow-0 border mb-4">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-2">
+                                                    <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/1.webp"
+                                                        class="img-fluid" alt="Phone">
+                                                </div>
+                                                <div
+                                                    class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                    <p class="text-muted mb-0">iPad</p>
+                                                </div>
+                                                <div
+                                                    class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                    <p class="text-muted mb-0 small">Pink rose</p>
+                                                </div>
+                                                <div
+                                                    class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                    <p class="text-muted mb-0 small">Capacity: 32GB</p>
+                                                </div>
+                                                <div
+                                                    class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                    <p class="text-muted mb-0 small">Qty: 1</p>
+                                                </div>
+                                                <div
+                                                    class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                                    <p class="text-muted mb-0 small">$399</p>
+                                                </div>
+                                            </div>
+                                            <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                                            <div class="row d-flex align-items-center">
+                                                <div class="col-md-2">
+                                                    <p class="text-muted mb-0 small">Track Order</p>
+                                                </div>
+                                                <div class="col-md-10">
+                                                    <div class="progress" style="height: 6px; border-radius: 16px;">
+                                                        <div class="progress-bar" role="progressbar"
+                                                            style="width: 20%; border-radius: 16px; background-color: #a8729a;"
+                                                            aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex justify-content-around mb-1">
+                                                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary
+                                                        </p>
+                                                        <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                                <div>
+
+                                                    <div class="d-flex justify-content-between pt-2">
+                                                        <p class="fw-bold mb-0">Order Details</p>
+                                                        <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> $898.00</p> -->
+                                                    </div>
+
+                                                    <div class="d-flex justify-content-between pt-2">
+                                                        <p class="text-muted mb-0">Order Id : <%=
+                                                                detailesOfLastOrderOfUser._id %>
+                                                        </p>
+                                                        <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p> -->
+                                                    </div>
+
+                                                    <div class="d-flex justify-content-between">
+                                                        <p class="text-muted mb-0">Ordered Date :<%=
+                                                                detailesOfLastOrderOfUser.orderedDate.toLocaleDateString()
+                                                                %>
+                                                        </p>
+                                                        <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p> -->
+                                                    </div>
+                                                    <div class="d-flex justify-content-end ">
+                                                        <button class="btn border"
+                                                            onclick="downloadInvoice('<%=usersName  %> ')">Get
+
+                                                            Invoice</button>
+                                                    </div>
+                                                </div>
+
+                                                <!-- <div class="d-flex justify-content-between mb-5">
+                                        <p class="text-muted mb-0">Recepits Voucher : 18KU-62IIK</p>
+                                       <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> 
+                                    </p>
+                                </div> -->
+                                </div>
+                                <div class="card-footer border-0 px-4 py-5"
+                                    style="background-color: #347b3f; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                                    <h5
+                                        class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
+                                        Total
+                                        paid: <span class="h2 mb-0 ms-2">
+                                        </span>
+                                        ₹ <%= totalPrice %>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+
+
+
+
+
+
+            <!-- <div class="" style="height: 90vh ;">
     <div class="container">
         <div class="d-flex justify-content-center align-items-center vh-100 ">
             <h1 class="mx-auto  mb-5">Placed your Order</h1>
@@ -11,14 +213,132 @@
         </div>
     </div>
 
-</div>
+</div> -->
 
 
 
 
 
 
-<%- include('../userIncludes/footer') %>
 
 
-<%- include('../userIncludes/bodyEnd') %>
+            <%- include('../userIncludes/footer') %>
+
+                <script>
+                    function downloadInvoice(userName) {
+                        console.log("reached");
+                        var data = {
+                            // Customize enables you to provide your own templates
+                            // Please review the documentation for instructions and examples
+                            "customize": {
+                                //  "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html 
+                            },
+                            "images": {
+                                // The logo on top of your invoice
+                                // "logo": "https://public.easyinvoice.cloud/img/logo_en_original.png",
+                                // The invoice background
+                                // "background": "https://public.easyinvoice.cloud/img/watermark-draft.jpg"
+                            },
+                            // Your own data
+                            "sender": {
+                                "company": "Decor",
+                                "address": "Street 23 KKD",
+                                "zip": "89876",
+                                "city": "Paper Town",
+                                "country": "India"
+                                //"custom1": "custom value 1",
+                                //"custom2": "custom value 2",
+                                //"custom3": "custom value 3"
+                            },
+                            // Your recipient
+                            "client": {
+                                "company": userName
+                                // "address": "Clientstreet 456",
+                                // "zip": "4567 CD",
+                                // "city": "Clientcity",
+                                // "country": "Clientcountry"
+                                // "custom1": "custom value 1",
+                                // "custom2": "custom value 2",
+                                // "custom3": "custom value 3"
+                            },
+                            "information": {
+                                // Invoice number
+
+                                // "number": "2021.0001",
+                                // Invoice data
+                                "date": new Date()
+                                // Invoice due date
+                                // "due-date": "31-12-2021"
+                            },
+                            // The products you would like to see on your invoice
+                            // Total values are being calculated automatically
+                            "products": [
+                                {
+                                    "quantity": 2,
+                                    "description": "Product 1",
+                                    "tax-rate": 6,
+                                    "price": 33.87
+                                },
+                                {
+                                    "quantity": 4.1,
+                                    "description": "Product 2",
+                                    "tax-rate": 6,
+                                    "price": 12.34
+                                },
+                                {
+                                    "quantity": 4.5678,
+                                    "description": "Product 3",
+                                    "tax-rate": 21,
+                                    "price": 6324.453456
+                                }
+                            ],
+                            // The message you would like to display on the bottom of your invoice
+
+
+
+                            "bottom-notice": "",
+
+
+                            // Settings to customize your invoice
+                            "settings": {
+                                "currency": "USD", // See documentation 'Locales and Currency' for more info. Leave empty for no currency.
+                                // "locale": "nl-NL", // Defaults to en-US, used for number formatting (See documentation 'Locales and Currency')
+                                // "tax-notation": "gst", // Defaults to 'vat'
+                                // "margin-top": 25, // Defaults to '25'
+                                // "margin-right": 25, // Defaults to '25'
+                                // "margin-left": 25, // Defaults to '25'
+                                // "margin-bottom": 25, // Defaults to '25'
+                                // "format": "A4", // Defaults to A4, options: A3, A4, A5, Legal, Letter, Tabloid
+                                // "height": "1000px", // allowed units: mm, cm, in, px
+                                // "width": "500px", // allowed units: mm, cm, in, px
+                                // "orientation": "landscape", // portrait or landscape, defaults to portrait
+                            },
+                            // Translate your invoice to your preferred language
+                            "translate": {
+                                // "invoice": "FACTUUR",  // Default to 'INVOICE'
+                                // "number": "Nummer", // Defaults to 'Number'
+                                // "date": "Datum", // Default to 'Date'
+                                // "due-date": "Verloopdatum", // Defaults to 'Due Date'
+                                // "subtotal": "Subtotaal", // Defaults to 'Subtotal'
+                                // "products": "Producten", // Defaults to 'Products'
+                                // "quantity": "Aantal", // Default to 'Quantity'
+                                // "price": "Prijs", // Defaults to 'Price'
+                                // "product-total": "Totaal", // Defaults to 'Total'
+                                // "total": "Totaal" // Defaults to 'Total'
+                            },
+                        };
+
+                        //Create your invoice! Easy!
+                        easyinvoice.createInvoice(data, function (result) {
+                            //The response will contain a base64 encoded PDF file
+                            // console.log('PDF base64 string: ', result.pdf);
+                            easyinvoice.download("invoice.pdf")
+                            console.log("dada");
+                        });
+
+
+
+                    }
+                </script>
+
+                <%- include('../userIncludes/bodyEnd') %>

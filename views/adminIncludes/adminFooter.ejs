@@ -11,25 +11,60 @@
 </footer>
 </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+    crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    function loopImage (files){
+    $(document).ready(function () {
+        $('#example').DataTable({
+            dom: 'Bfrtip',
+            lengthMenu: [
+                [10, 25, 50, -1],
+                [10, 25, 50, 'All'],
+            ],
+            buttons: [
+                // 'csv'
+                'copy', , 'excel', 'pdf', 'print'
+            ],
+            // order: [[2, 'desc']],
+            "ordering": false,
+
+        });
+    });
+</script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
+
+
+
+<script>
+    function loopImage(files) {
 
         const totalImgs = files.length
-        
 
-        for(let i=0 ; i<totalImgs; i++){
-        let newImages = document.createElement("img")
-        newImages.setAttribute("src", window.URL.createObjectURL(files[i]));
-        newImages.setAttribute("height", "200px");
-        newImages.setAttribute("padding-right", "50px");
-        document.getElementById("viewingImg").appendChild(newImages);
+
+        for (let i = 0; i < totalImgs; i++) {
+            let newImages = document.createElement("img")
+            newImages.setAttribute("src", window.URL.createObjectURL(files[i]));
+            newImages.setAttribute("height", "200px");
+            newImages.setAttribute("padding-right", "50px");
+            document.getElementById("viewingImg").appendChild(newImages);
+        }
+
+
+
     }
 
 
-      
-    }
-   
-   
 
 </script>
 <script src="/adminStatic/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>

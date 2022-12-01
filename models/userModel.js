@@ -11,13 +11,16 @@ const userSchema = new Schema({
         type: String,
         require: [true, 'Must Have a Number'],
     },
+    email:{
+        type:String,
+    },
     password: {
         type: String,
         require: [true, 'Must have a Password'],
     },
     access: {
         type: Boolean,
-        require: [true, "Must have a access valuse"]
+        require: [true, "Must have a access value"]
     },
     cart:{
         type: Schema.Types.ObjectId,

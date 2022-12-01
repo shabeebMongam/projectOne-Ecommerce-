@@ -1,0 +1,75 @@
+<%- include('../adminIncludes/adminHeader') %>
+
+    <div id="app">
+        <%- include('../adminIncludes/sidebar') %>
+
+            <div id="main">
+                <div class="page-heading">
+
+
+
+
+
+
+
+
+                    <table id="example" class="display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>ORDER STATUS</th>
+                                <th>DATE</th>
+                                <th>ACTION</th>
+                                <!-- <th>Start date</th>
+                                <th>Salary</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(user of allOrdersOfUsers){%>
+                                <tr>
+                                    <td>
+                                        <%= user.orders._id %>
+                                    </td>
+                                    <td>
+                                        <%= user.orders.status %>
+                                    </td>
+                                    <td>
+                                        <%= user.orders.orderedDate.toLocaleDateString() %>
+                                            <!-- <hr> --> -----
+                                            <%= user.orders.orderedDate.toLocaleTimeString('en-US') %>
+                                    </td>
+                                    <td><a href="/admin/showOrderDetailes/<%=user.userId%>/<%=user.orders._id%>  "
+                                            class="btn border">Show Details</a></td>
+                                    <!-- <td>2011-04-25</td>
+                                        <td>$320,800</td> -->
+                                </tr>
+                                <% } %>
+
+
+
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>ORDER STATUS</th>
+                                <th>DATE</th>
+                                <th>ACTION</th>
+                                <!-- <th>Start date</th>
+                                <th>Salary</th> -->
+                            </tr>
+                        </tfoot>
+                    </table>
+
+
+
+
+
+
+
+
+                </div>
+            </div>
+
+
+            <%- include('../adminIncludes/adminFooter') %>

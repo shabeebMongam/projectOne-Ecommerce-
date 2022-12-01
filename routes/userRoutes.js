@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 const Razorpay = require('razorpay')
 const instance = new Razorpay({ key_id: 'rzp_test_nskbaOm2bho9QL', key_secret: 'hC8hOtH65DFfZ52JZgcuuTrc' })
+var ObjectId = require('mongodb').ObjectID;
 
 
 const User = require('../models/userModel');
@@ -10,11 +11,12 @@ const { validatingUserRegisterPartOne, validatingUserRegisterPartTwo } = require
 const { validatingUserLoginPartOne, validatingUserLoginPartTwo } = require('../middleware/validation/userLogin');
 const Product = require('../models/productModel');
 const Cart = require('../models/cartModel');
-const { getMainPage, getShop, getRegister, getLogin, getOtpVerify, getShopingSingle, getCart, getSelectAddressAndPayment, getProfile, getRemoveItemFromCart, getOrders, getOrderPlacedStatus, getWishlist } = require('../controllers/userController');
+const { getMainPage, getShop, getRegister, getLogin, getOtpVerify, getShopingSingle, getCart, getSelectAddressAndPayment, getProfile, getRemoveItemFromCart, getOrders, getOrderPlacedStatus, getWishlist, getAbout } = require('../controllers/userController');
 const Banner = require('../models/bannerModel');
 const Order = require('../models/orderModel');
 const Wishlist = require('../models/wishlistModel');
 const { default: mongoose } = require('mongoose');
+const Category = require('../models/categoryModel');
 
 
 // Twilio
@@ -37,6 +39,107 @@ router.route('/removeItemFromCart/:id').get(getRemoveItemFromCart)
 router.route('/orders').get(getOrders)
 router.route('/orderPlacedStatus').get(getOrderPlacedStatus)
 router.route('/wishlist').get(getWishlist)
+router.route('/about').get(getAbout)
+
+
+
+
+
+router.get('/testing', async (req, res) => {
+
+    const userName = req.session.loggedUserName
+    const userId = req.session.loggedUserId
+    const numberOfProductsInCart = await Cart.find({ userId: userId })
+    if ((numberOfProductsInCart).length > 0) {
+        cartLength = numberOfProductsInCart[0].products.length
+    } else {
+        cartLength = 0
+    }
+
+    const lastOrderOfUser = await Order.aggregate([
+        {
+            '$match': {
+                'userId': ObjectId('636bbd026108a89aa317c428')
+            }
+        },
+        {
+            '$unwind': {
+                'path': '$orders'
+            }
+        }, {
+            '$sort': {
+                'orders': -1
+            }
+        }
+    ])
+
+    const detailesOfLastOrderOfUser = lastOrderOfUser[0].orders
+    console.log(detailesOfLastOrderOfUser);
+
+
+
+
+    res.render('userFiles/orderPlaced', { user: true, usersName: userName, userId, cartLength, detailesOfLastOrderOfUser })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+router.post('/updateOrderStatus/:userId/:orderId', async (req, res) => {
+    const userId = req.params.userId
+    const orderId = req.params.orderId
+
+    console.log(userId);
+    console.log(orderId);
+
+
+
+    const userOfOrder = await Order.find({ userId: userId })
+    const findingIndexOfOrder = userOfOrder[0].orders.findIndex(indexToChange => indexToChange._id == orderId)
+    userOfOrder[0].orders[findingIndexOfOrder].status = req.body.orderStatus
+
+    userOfOrder[0].save().then(console.log("Status changed"))
+
+    console.log(findingIndexOfOrder);
+
+    console.log(req.body);
+    res.redirect('/admin/showOrder')
+})
+
+
+
+router.get('/filterByCategory/:categoryId', async (req, res) => {
+
+    const categoryId = req.params.categoryId
+    const productsInSpecificCategory = await Product.find({ productCategory: categoryId })
+    const userName = req.session.loggedUserName
+    const userId = req.session.loggedUserId
+    const numberOfProductsInCart = await Cart.find({ userId: userId })
+
+    if ((numberOfProductsInCart).length > 0) {
+        cartLength = numberOfProductsInCart[0].products.length
+    } else {
+        cartLength = 0
+    }
+
+    const allCategories = await Category.find({})
+    console.log(allCategories);
+
+    console.log(categoryId);
+    console.log(productsInSpecificCategory);
+
+    return res.render('userFiles/shopPage', { user: true, products: productsInSpecificCategory, usersName: userName, userId, cartLength, allCategories })
+
+
+})
 
 
 
@@ -196,23 +299,7 @@ router.route('/wishlist').get(getWishlist)
 
 // })
 
-// router.post('/selectAddressAndPayment', async (req, res) => {
-//     const { cartTotal } = req.body
-//     if (req.session.userLoggedIn) {
-//         const userName = req.session.loggedUserName
-//         const userId = req.session.loggedUserId
 
-//         const toFindUserAddress = await User.findOne({ _id: userId })
-//         const savedAddress = toFindUserAddress.address
-//         console.log(savedAddress);
-
-
-//         res.render('userFiles/paymentAndAddress', { user: true, usersName: userName, userId, savedAddress, cartTotal })
-//     } else {
-//         res.redirect('/login')
-//     }
-
-// })
 
 // router.get('/profile', async (req, res) => {
 //     if (req.session.userLoggedIn) {
@@ -284,6 +371,21 @@ router.route('/wishlist').get(getWishlist)
 // router.get('/wishlist', (req, res) => {
 //     res.render('userFiles/userWishlist', { user: false })
 // })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -404,13 +506,14 @@ router.post('/login', validatingUserLoginPartOne, validatingUserLoginPartTwo, as
     }
 })
 
+
+
+
+
 router.post('/addToCart/:id', async (req, res) => {
 
     console.log("vannu");
-
     // res.json({status:true})
-
-
     if (req.session.userLoggedIn) {
 
         const productId = req.params.id
@@ -424,10 +527,6 @@ router.post('/addToCart/:id', async (req, res) => {
         const userId = req.session.loggedUserId
         // console.log(productToAdd.productPrice);
         // console.log(productToAdd.productName);
-
-
-
-
         try {
             let cart = await Cart.findOne({ userId });
             console.log(cart);
@@ -443,7 +542,17 @@ router.post('/addToCart/:id', async (req, res) => {
                     cart.products[itemIndex] = productItem;
 
                     cart = await cart.save().then(console.log("Product Incremented"));
-                    res.json({ status: true })
+
+
+                    const numberOfProductsInCart = await Cart.find({ userId: userId })
+                    if ((numberOfProductsInCart).length > 0) {
+                        cartLength = numberOfProductsInCart[0].products.length
+                    } else {
+                        cartLength = 0
+                    }
+
+
+                    res.json({ status: true, cartLength })
                     // res.redirect('/cart')    
                 } else {
                     //product does not exists in cart, add new item in existing cart
@@ -451,7 +560,14 @@ router.post('/addToCart/:id', async (req, res) => {
                     cart.products.push({ productId, productQuantity, productName, productPrice, productImages });
                     cart = await cart.save().then(console.log("Product added "));
 
-                    res.json({ status: true })
+                    const numberOfProductsInCart = await Cart.find({ userId: userId })
+                    if ((numberOfProductsInCart).length > 0) {
+                        cartLength = numberOfProductsInCart[0].products.length
+                    } else {
+                        cartLength = 0
+                    }
+
+                    res.json({ status: true, cartLength })
                     // res.redirect('/cart')
                 }
 
@@ -466,8 +582,14 @@ router.post('/addToCart/:id', async (req, res) => {
 
                 newCart.save().then(console.log("Added new cart")).catch((err) => { console.log(err); })
 
+                const numberOfProductsInCart = await Cart.find({ userId: userId })
+                if ((numberOfProductsInCart).length > 0) {
+                    cartLength = numberOfProductsInCart[0].products.length
+                } else {
+                    cartLength = 0
+                }
 
-                res.json({ status: true })
+                res.json({ status: true, cartLength })
 
                 // res.send()  redirect('/cart')
             }
@@ -484,6 +606,14 @@ router.post('/addToCart/:id', async (req, res) => {
 
 
 })
+
+
+
+
+
+
+
+
 
 router.post('/changeProductQuantity', async (req, res) => {
     console.log(req.body);
@@ -521,48 +651,6 @@ router.post('/changeProductQuantity', async (req, res) => {
     }
 })
 
-
-
-
-
-
-
-//     console.log(req.body);
-
-
-//     const userId = req.body.userId
-//     const productId = req.body.productId
-//     const count = req.body.count
-//     console.log(typeof (count));
-//     try {
-//         let cart = await Cart.findOne({ userId });
-//         console.log(cart);
-//         if (cart) {
-//             //cart exists for user
-//             let itemIndex = cart.products.findIndex(p => p.productId == productId);
-
-//             if (itemIndex > -1) {
-//                 console.log("incrementing quantity");
-//                 //product exists in the cart, update the quantity
-//                 let productItem = cart.products[itemIndex];
-//                 productItem.productQuantity = productItem.productQuantity + parseInt(count);
-//                 cart.products[itemIndex] = productItem;
-
-//             }
-//             cart = await cart.save().then(console.log("Product Incremented"));
-//             res.redirect('/cart')
-//         }
-
-//     } catch (err) {
-//         console.log(err);
-//         res.status(500).send("Something went wrong");
-//     }
-
-
-
-
-// })
-
 router.post('/addAddress', async (req, res) => {
     console.log(req.body);
     const { name, address, zipCode, mobileNumber, alternateMobileNumber } = req.body
@@ -582,17 +670,32 @@ router.post('/addAddress', async (req, res) => {
     res.redirect('/selectAddressAndPayment')
 })
 
+router.get('/selectAddressAndPayment/:total', async (req, res) => {
+
+    const { total } = req.params
+
+    if (req.session.userLoggedIn) {
+        const userName = req.session.loggedUserName
+        const userId = req.session.loggedUserId
+
+        const toFindUserAddress = await User.findOne({ _id: userId })
+        const savedAddress = toFindUserAddress.address
+        console.log(savedAddress);
+
+
+        res.render('userFiles/paymentAndAddress', { user: true, usersName: userName, userId, savedAddress, cartTotal: total })
+    } else {
+        res.redirect('/login')
+    }
+
+})
+
+
 router.post('/orderPlaced', async (req, res) => {
 
     console.log(req.body);
 
     console.log("At cod");
-
-
-
-
-
-
 
     console.log("From orderPlaced COD");
     const userId = req.session.loggedUserId
@@ -655,7 +758,7 @@ router.post('/orderPlaced', async (req, res) => {
 
             function generateRazorpay() {
                 instance.orders.create({
-                    amount: totalAmount,
+                    amount: totalAmount * 100,
                     currency: "INR",
                     receipt: orderIdInString,
                     // notes: {
@@ -672,9 +775,6 @@ router.post('/orderPlaced', async (req, res) => {
 
         }
 
-
-
-        //    return res.redirect('/orderPlaced')
     }
     else {
 
@@ -709,88 +809,36 @@ router.post('/orderPlaced', async (req, res) => {
 
         if (req.body.payment === "cod") {
             res.json({ paymentType: "cod" })
-        } else if (req.body.payment === "onlinePayment") {
+        } else if (req.body.payment === "online") {
+
+            let orderIdInString = orderId.toString()
+            console.log(orderIdInString);
+
+            let totalAmount = parseInt(req.body.cartTotal)
+            console.log(totalAmount);
+            console.log(typeof (totalAmount));
 
             function generateRazorpay() {
                 instance.orders.create({
-                    amount: 50000,
+                    amount: totalAmount,
                     currency: "INR",
-                    receipt: "newRecipt",
+                    receipt: orderIdInString,
                     // notes: {
                     //   key1: "value3",
                     //   key2: "value2" 
                     // }
                 }, (err, order) => {
                     console.log(order);
-                    res.json(order)
+                    res.json({ paymentType: "onlinePayment", order })
                 })
             }
             generateRazorpay()
 
-            res.json({ paymentType: "onlinePayment" })
+
         }
     }
-
-
-
 })
 
-
-router.post('/orderPlacedOnlinePayment', (req, res) => {
-
-    console.log("online");
-
-
-    function generateRazorpay() {
-        instance.orders.create({
-            amount: 50000,
-            currency: "INR",
-            receipt: "newRecipt",
-            // notes: {
-            //   key1: "value3",
-            //   key2: "value2" 
-            // }
-        }, (err, order) => {
-            console.log(order);
-            res.json(order)
-        })
-    }
-    generateRazorpay()
-
-
-
-})
-
-
-
-
-router.post('/placeOrder', (req, res) => {
-    console.log(req.body);
-
-    if (req.body.paymentMethod === 'onlinePayment') {
-
-        function generateRazorpay() {
-            instance.orders.create({
-                amount: 50000,
-                currency: "INR",
-                receipt: "newRecipt",
-                // notes: {
-                //   key1: "value3",
-                //   key2: "value2"
-                // }
-            }, (err, order) => {
-                console.log(order);
-                res.json(order)
-            })
-        }
-        generateRazorpay()
-
-        // res.json(true)
-    } else {
-        res.json(false)
-    }
-
-})
 
 router.post('/wishlist/:id', async (req, res) => {
     const productId = req.params.id
@@ -805,25 +853,27 @@ router.post('/wishlist/:id', async (req, res) => {
     console.log(inWishlist);
     console.log("printing inwishlist");
 
-    if(inWishlist != null){
+    if (inWishlist != null) {
 
         let findIndex = inWishlist.products.findIndex(p => p.product == productId)
         console.log(findIndex);
         if (findIndex >= 0) {
             inWishlist.products.splice(findIndex, 1)
             await inWishlist.save().then(console.log("Item Removed"));
+            res.redirect('/shop')
         } else if (findIndex == -1) {
             // console.log(productId);
 
             inWishlist.products.push({
-                product:productId
+                product: productId
             })
-          
+
             inWishlist.save().then((saved) => {
                 console.log("Saved to existing user wishlist");
             })
+            res.redirect('/shop')
         }
-    }else{
+    } else {
         const newWishlist = new Wishlist({
             userId: userId,
             products: [{
@@ -834,39 +884,189 @@ router.post('/wishlist/:id', async (req, res) => {
             console.log("New wishlist for user");
         })
 
+        res.redirect('/shop')
+
     }
-
-   
-
-
-
-
-    // const findWishListProduct = await Wishlist.findOne({userId:userId})
-
-
-    // let itemIndex = findWishListProduct.products.findIndex((p) =>  {
-    //     console.log(p.product);
-    //     p.product == productIdInObjectId });
-    // console.log(itemIndex);
-
-    // return
-    // if(findWishListProduct.products)
-
-
 
 })
 
 router.post('/verifyPayment', (req, res) => {
 
-    console.log("hey");
-    console.log(req.body);
+    const orderId = req.body.payment.razorpay_order_id
+    const paymentId = req.body.payment.razorpay_payment_id
+    const signature = req.body.payment.razorpay_signature
 
-    res.send("hey")
+    const crypto = require('crypto')
+    let hmac = crypto.createHmac('sha256', 'hC8hOtH65DFfZ52JZgcuuTrc')
+
+    hmac.update(orderId + '|' + paymentId)
+    hmac = hmac.digest('hex')
+
+    if (hmac == signature) {
+        console.log("good");
+        res.json({ status: true })
+    } else {
+        res.json({ status: false })
+        console.log("BAd");
+    }
+
+
+
 })
 
-router.post('/testing', (req, res) => {
-    console.log(req.body);
-    // res.send(req.body)
+
+
+
+router.get('/editProfile', async (req, res) => {
+    if (req.session.userLoggedIn) {
+        const userName = req.session.loggedUserName
+        const userId = req.session.loggedUserId
+
+        const user = await User.findById(userId)
+
+        console.log(user);
+
+        res.render('userFiles/editProfile', { user: true, usersName: userName, userId, userData: user })
+    } else {
+        res.redirect('/login')
+    }
+})
+
+router.post('/editProfile', async (req, res) => {
+    const { name, number, email } = req.body
+    const userId = req.session.loggedUserId
+    // const updated = await User.findByIdAndUpdate(userId, { name:name,mobileNumber:number,email })
+    const updated = await User.findById(userId)
+    updated.name = name
+    updated.mobileNumber = number
+    updated.email = email
+    req.session.loggedUserName = name
+    console.log(req.session.loggedUserName);
+
+    updated.save().then(console.log("Done"))
+    console.log("dasdas");
+    console.log(updated);
+    console.log("dasdas");
+    res.redirect('/profile')
+})
+
+router.get('/addToCartFromWishlist/:id', async (req, res) => {
+    if (req.session.userLoggedIn) {
+        const productId = req.params.id
+        const userId = req.session.loggedUserId
+        const productToAdd = await Product.findById(productId)
+
+        const productQuantity = 1
+        const productName = productToAdd.productName
+        const productPrice = productToAdd.productPrice
+        const productImages = productToAdd.productImages
+
+
+        try {
+            let cart = await Cart.findOne({ userId });
+            console.log(cart);
+            if (cart) {
+                //cart exists for user
+                let itemIndex = cart.products.findIndex(p => p.productId == productId);
+
+                if (itemIndex > -1) {
+                    console.log("incrementing quantity");
+                    //product exists in the cart, update the quantity
+                    let productItem = cart.products[itemIndex];
+                    productItem.productQuantity = productItem.productQuantity + parseInt(productQuantity);
+                    cart.products[itemIndex] = productItem;
+
+                    cart = await cart.save().then(console.log("Product Incremented"));
+
+
+                    const productOfWishlistToClean = await Wishlist.find({ userId: userId })
+                    console.log(productId);
+                    let itemIndexOfWishlist = productOfWishlistToClean[0].products.findIndex(p2 => p2.product.toString() === productId);
+                    if (itemIndexOfWishlist > -1) {
+                        let productToClean = productOfWishlistToClean[0].products.splice(itemIndexOfWishlist, 1)
+                    }
+                    // const productsLength = productOfWishlistToClean[0].products.length
+                    console.log(productOfWishlistToClean);
+                    console.log(productOfWishlistToClean[0]);
+                    console.log(itemIndexOfWishlist);
+
+                    await productOfWishlistToClean[0].save().then(console.log("Removed the product fronm Wishlist "))
+
+
+                    // res.json({ status: true })
+                    res.redirect('/cart')
+                } else {
+                    //product does not exists in cart, add new item in existing cart
+                    console.log("Adding product to existing user");
+                    cart.products.push({ productId, productQuantity, productName, productPrice, productImages });
+                    cart = await cart.save().then(console.log("Product added "));
+
+
+                    const productOfWishlistToClean = await Wishlist.find({ userId: userId })
+                    console.log(productId);
+                    let itemIndexOfWishlist = productOfWishlistToClean[0].products.findIndex(p2 => p2.product.toString() === productId);
+                    if (itemIndexOfWishlist > -1) {
+                        let productToClean = productOfWishlistToClean[0].products.splice(itemIndexOfWishlist, 1)
+                    }
+                    // const productsLength = productOfWishlistToClean[0].products.length
+                    console.log(productOfWishlistToClean);
+                    console.log(productOfWishlistToClean[0]);
+                    console.log(itemIndexOfWishlist);
+
+                    await productOfWishlistToClean[0].save().then(console.log("Removed the product fronm Wishlist "))
+
+                    // res.json({ status: true })
+                    res.redirect('/cart')
+                }
+
+            } else {
+                //no cart for user, create new cart
+                console.log("no cart");
+
+                const newCart = new Cart({
+                    userId,
+                    products: [{ productId, productQuantity, productName, productPrice, productImages }]
+                })
+
+                newCart.save().then(console.log("Added new cart")).catch((err) => { console.log(err); })
+
+
+                // res.json({ status: true })
+
+                res.redirect('/cart')
+            }
+        }
+        catch (err) {
+            console.log(err);
+            res.status(500).send("Something went wrong");
+        }
+
+    } else {
+        console.log("No user");
+        res.redirect('/shop')
+
+    }
+})
+
+router.get('/removeAddress/:id', async (req, res) => {
+    if (req.session.userLoggedIn) {
+        const productId = req.params.id
+        const userId = req.session.loggedUserId
+
+        const user = await User.findById(userId)
+
+        let addressIndexToRemove = user.address.findIndex(add => add._id.toString() === productId);
+        console.log(user);
+        console.log(addressIndexToRemove);
+        if (addressIndexToRemove > -1) {
+            let addressToClean = user.address.splice(addressIndexToRemove, 1)
+        }
+        await user.save().then(console.log("Address removed"))
+        res.redirect('/selectAddressAndPayment')
+    } else {
+        res.redirect('/login')
+    }
+
 })
 
 
@@ -877,47 +1077,6 @@ router.post('/testing', (req, res) => {
 
 
 
-
-
-// $$$$$$$$$$ Use the below code while using ajax $$$$$$$$$$$$$$$$$$
-
-
-// router.post('/changeProductQuantity',async(req,res)=>{
-
-
-//         const userId = req.body.user
-//         const productId = req.body.product
-//         const count = req.body.count
-//         console.log(typeof(count));
-//         try {
-//             let cart = await Cart.findOne({ userId });
-//               console.log(cart);
-//             if (cart) {
-//               //cart exists for user
-//               let itemIndex = cart.products.findIndex(p => p.productId == productId);
-
-//               if (itemIndex > -1) {
-//                   console.log("incrementing quantity");
-//                 //product exists in the cart, update the quantity
-//                 let productItem = cart.products[itemIndex];
-//                 productItem.productQuantity = productItem.productQuantity + parseInt(count) ;
-//                 cart.products[itemIndex] = productItem;
-
-//               }
-//               cart = await cart.save().then(console.log("Product Incremented"));
-//               res.status(201).send(cart);
-//             }
-
-//           } catch (err) {
-//             console.log(err);
-//             res.status(500).send("Something went wrong");
-//           }
-
-
-
-
-//         console.log(req.body);
-//     })
 
 
 

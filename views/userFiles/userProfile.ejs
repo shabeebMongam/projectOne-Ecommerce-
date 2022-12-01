@@ -1,88 +1,115 @@
 <%- include('../userIncludes/header') %>
 
-<!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <!-- <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> -->
-<!------ Include the above in your HEAD tag ---------->
-</head>
-<body>
-<%- include('../userIncludes/nav') %>
+  <!------ Include the above in your HEAD tag ---------->
+  </head>
+
+  <body>
+    <%- include('../userIncludes/nav') %>
 
 
-<section style="background-color: #eee;">
-    <div class=" container py-5">
-   
-  
-      <div class="row">
-        <div class="col-lg-4">
-          <div class="card mb-4">
-            <div class="card-body text-center">
-              <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
-                class="rounded-circle img-fluid" style="width: 150px;">
-              <h5 class="my-3"><%=userDetailes.name%> </h5>
-              <p class="text-muted mb-1"><%=userDetailes.mobileNumber%> </p>
-           
+      <section style="background-color: #eee;">
+        <div class=" container py-5">
+
+
+          <div class="row">
+            <div class="col-lg-4">
+              <div class="card mb-4">
+                <div class="card-body text-center">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp" alt="avatar"
+                    class="rounded-circle img-fluid" style="width: 150px;">
+                  <h5 class="my-3">
+                    <%=userDetailes.name%>
+                  </h5>
+                  <p class="text-muted mb-1">
+                    <%=userDetailes.mobileNumber%>
+                  </p>
+
+                </div>
+              </div>
+              <div class="card mb-4 mb-lg-0">
+                <div class="card-body p-0 mx-3">
+                  <ul class="list-group list-group-flush rounded-3">
+                    <li class="list-group-item d-flex  align-items-center p-3">
+                      <!-- <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i> -->
+                      <a href="/profile">
+                        <p class="mb-0 ms-3">Profile</p>
+                      </a>
+                    </li>
+                    <li class="list-group-item d-flex  align-items-center p-3">
+                      <!-- <i class="fas fa-globe fa-lg text-warning"></i> -->
+                      <a href="/cart">
+                        <p class="mb-0 ms-3">Cart</p>
+                      </a>
+                    </li>
+                    <li class="list-group-item d-flex  align-items-center p-3">
+                      <!-- <i class="fab fa-github fa-lg" style="color: #333333;"></i> -->
+                      <a href="/orders">
+                        <p class="mb-0 ms-3">Orders</p>
+                      </a>
+                    </li>
+                    <li class="list-group-item d-flex  align-items-center p-3">
+                      <!-- <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i> -->
+                      <a href="/wishlist">
+                        <p class="mb-0 ms-3">Wishlist</p>
+                      </a>
+                    </li>
+
+
+                  </ul>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="card mb-4 mb-lg-0">
-            <div class="card-body p-0 mx-3">
-              <ul class="list-group list-group-flush rounded-3">
-                <li class="list-group-item d-flex  align-items-center p-3">
-                  <!-- <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i> -->
-                  <a href="/profile"><p class="mb-0 ms-3">Profile</p></a>
-                </li>
-                <li class="list-group-item d-flex  align-items-center p-3">
-                  <!-- <i class="fas fa-globe fa-lg text-warning"></i> -->
-                  <a href="/cart"><p class="mb-0 ms-3">Cart</p></a>
-                </li>
-                <li class="list-group-item d-flex  align-items-center p-3">
-                  <!-- <i class="fab fa-github fa-lg" style="color: #333333;"></i> -->
-                 <a href="/orders"><p class="mb-0 ms-3">Orders</p></a> 
-                </li>
-                <li class="list-group-item d-flex  align-items-center p-3">
-                  <!-- <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i> -->
-                  <a href="/wishlist"><p class="mb-0 ms-3">Wishlist</p></a>
-                </li>
-               
-              
-              </ul>
-            </div>
-          </div>
-        </div>
 
 
 
-        <div class="col-lg-8">
-          <div class="card mb-4">
-            <div class="card-body">
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Full Name</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0"><%=userDetailes.name%></p>
-                </div>
-              </div>
-              <hr>
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Email</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0">example@example.com</p>
-                </div>
-              </div>
-              <hr>
-              
-              <div class="row">
-                <div class="col-sm-3">
-                  <p class="mb-0">Mobile</p>
-                </div>
-                <div class="col-sm-9">
-                  <p class="text-muted mb-0"><%=userDetailes.mobileNumber%></p>
-                </div>
-              </div>
-              <hr>
+            <div class="col-lg-8">
+              <div class="card mb-4">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Full Name</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <%=userDetailes.name%>
+                      </p>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Email</p>
+                    </div>
+
+
+                    <% if(userDetailes.email){ %>
+                      <div class="col-sm-9">
+                        <p class="text-muted mb-0">
+                          <%=userDetailes.email%>
+                        </p>
+                      </div>
+                      <% }else{ %>
+                        <div class="col-sm-9">
+                          <p class="text-muted mb-0">Email is Not Added</p>
+                        </div>
+                        <% } %>
+                  </div>
+                  <hr>
+
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <p class="mb-0">Mobile</p>
+                    </div>
+                    <div class="col-sm-9">
+                      <p class="text-muted mb-0">
+                        <%=userDetailes.mobileNumber%>
+                      </p>
+                    </div>
+                  </div>
+                  <!-- <hr>
               <div class="row">
                 <div class="col-sm-3">
                   <p class="mb-0">Address</p>
@@ -90,19 +117,20 @@
                 <div class="col-sm-9">
                   <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
                 </div>
+              </div> -->
+                </div>
+              </div>
+              <div class="d-flex justify-content-end">
+                <a href="/editProfile" class="btn border border-dark ">Edit Profile</a>
+                <!-- <button class="btn border border-dark "></button> -->
               </div>
             </div>
-          </div>
-          <div class="d-flex justify-content-end">
-          <button class="btn border border-dark ">Edit Profile</button>
+
+
+
           </div>
         </div>
-
-        
-
-      </div>
-    </div>
-  </section>
+      </section>
 
 
 
@@ -123,7 +151,7 @@
 
 
 
-<%- include('../userIncludes/footer') %>
+      <%- include('../userIncludes/footer') %>
 
 
-<%- include('../userIncludes/bodyEnd') %>
+        <%- include('../userIncludes/bodyEnd') %>

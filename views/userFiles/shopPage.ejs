@@ -13,20 +13,25 @@
             <div class="container py-5">
                 <div class="row">
 
-                    <!-- <div class="col-lg-3">
-                        <h1 class="h2 pb-4">Categories</h1>
-                        <ul class="list-unstyled templatemo-accordion">
+                    <div class="col-lg-2">
+                        <h1 class="h2 pb-4 "></h1>
+                        <ul class="list-unstyled templatemo-accordion pt-5">
                             <li class="pb-3">
                                 <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
-                                    Gender
+                                    Category
                                     <i class="fa fa-fw fa-chevron-circle-down mt-1"></i>
                                 </a>
-                                <ul class="collapse show list-unstyled pl-3">
-                                    <li><a class="text-decoration-none" href="#">Men</a></li>
-                                    <li><a class="text-decoration-none" href="#">Women</a></li>
+                                <ul class="collapse show list-unstyled pl-3 ms-2">
+                                    <% for(category of allCategories){%>
+                                        <li><a class="text-decoration-none"
+                                                href="/filterByCategory/<%= category._id%> ">
+                                                <%= category.categoryName %>
+                                            </a></li>
+                                        <% } %>
+
                                 </ul>
                             </li>
-                            <li class="pb-3">
+                            <!-- <li class="pb-3">
                                 <a class="collapsed d-flex justify-content-between h3 text-decoration-none" href="#">
                                     Sale
                                     <i class="pull-right fa fa-fw fa-chevron-circle-down mt-1"></i>
@@ -46,42 +51,38 @@
                                     <li><a class="text-decoration-none" href="#">Sweather</a></li>
                                     <li><a class="text-decoration-none" href="#">Sunglass</a></li>
                                 </ul>
-                            </li>
+                            </li> -->
                         </ul>
-                    </div> -->
+                    </div>
 
-                    <div class="col-lg-12">
-                        <div class="row">
+                    <div class="col-lg-10">
+                        <!-- <div class="row">
                             <div class="col-md-6">
-                                <ul class="list-inline shop-top-menu pb-3 pt-1">
-                                    <li class="list-inline-item">
-                                        <a class="h3 text-dark text-decoration-none mr-3" href="#">All</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a class="h3 text-dark text-decoration-none mr-3" href="#">Indoor</a>
-                                    </li>
-                                    <li class="list-inline-item">
-                                        <a class="h3 text-dark text-decoration-none" href="#">Outdoor</a>
-                                    </li>
-                                </ul>
+                                
+                                
+
+
+
                             </div>
+
+
                             <div class="col-md-6 pb-4">
                                 <div class="d-flex">
                                     <select class="form-control">
-                                        <option>Featured</option>
+                                        <option selected disabled>Categories</option>
                                         <option>A to Z</option>
                                         <option>Item</option>
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="row">
 
                             <% for(product of products){ %>
 
-                                <div class="col-md-3">
-                                    <div class="card mb-4 product-wap rounded-0">
-                                        <div class="card rounded-0">
+                                <div class="col-md-4">
+                                    <div class="card mb-4 product-wap rounded-0 ">
+                                        <div class="card rounded-0 ">
                                             <img class="card-img rounded-0 img-fluid"
                                                 src="/commonStatic/productImages/<%=product.productImages[0] %> ">
 
@@ -89,8 +90,10 @@
                                                 class="card-img-overlay rounded-0 product-overlay d-flex align-items-end justify-content-end">
                                                 <ul class="list-unstyled ">
                                                     <li>
-                                                        <form action="/wishlist/<%=product._id%> " method="post"><button class="btn btn-success text-white"
-                                                                ><i class="far fa-heart"></i></button></form>
+                                                        <form action="/wishlist/<%=product._id%> " method="post"><button
+                                                                class="btn btn-success text-white"
+                                                                onclick="addedToWishlist()"><i
+                                                                    class="far fa-heart"></i></button></form>
                                                     </li>
                                                     <li><a class="btn btn-success text-white mt-2"
                                                             href="/shopSingle/<%=product._id%> "><i
@@ -316,25 +319,49 @@
                             method: 'post',
                             success: (response) => {
                                 console.log(response);
+                                $('#cartLength').text(response.cartLength)
                                 if (response.status == true) {
+                                    console.log(response.cartLength);
                                     const Toast = Swal.mixin({
                                         toast: true,
                                         position: 'top-end',
                                         showConfirmButton: false,
-                                        timer: 3000,
-                                        timerProgressBar: true,
+                                        timer: 1500,
+                                        // timerProgressBar: true,
                                         didOpen: (toast) => {
                                             toast.addEventListener('mouseenter', Swal.stopTimer)
                                             toast.addEventListener('mouseleave', Swal.resumeTimer)
                                         }
                                     })
-
                                     Toast.fire({
                                         icon: 'success',
                                         title: 'Added to cart'
                                     })
+
+
+
+
                                 }
                             }
+                        })
+                    }
+
+                    function addedToWishlist() {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: false,
+                            timer: 1500,
+                            // timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Added to wishlist'
                         })
                     }
                 </script>

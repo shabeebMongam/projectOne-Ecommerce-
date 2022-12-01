@@ -1,0 +1,125 @@
+<%- include('../adminIncludes/adminHeader') %>
+
+    <div id="app">
+        <%- include('../adminIncludes/sidebar') %>
+
+            <div id="main">
+                <div class="page-heading">
+                    <div class="page-title">
+                        <div class="row">
+                            <div class="col-12 col-md-6 order-md-1 order-last">
+                                <!-- <h3>Order Of </h3> -->
+                                <!-- <p class="text-subtitle text-muted">The default layout </p> -->
+                            </div>
+                            <!-- <div class="col-12 col-md-6 order-md-2 order-first">
+                                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Layout Default</li>
+                                    </ol>
+                                </nav>
+                            </div> -->
+                        </div>
+                    </div>
+                    <section class="section">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between">
+                                <h4 class="card-title">Ordered On : <%=
+                                        orderToDisplay.orderedDate.toLocaleDateString()%>
+                                        -- <%= orderToDisplay.orderedDate.toLocaleTimeString('en-US') %>
+                                </h4>
+
+                                <div>
+
+                                    <form action="/updateOrderStatus/<%=userIdOfTheUser%>/<%=orderToDisplay._id %> "
+                                        method="post">
+                                        <select id="cars" class="border border-rounded form-select" name="orderStatus">
+                                            <option value="packed">Packed</option>
+                                            <option value="shipped">Shipped</option>
+                                            <option value="delivered">Delivered</option>
+                                            <!-- <option value="audi">Audi</option> -->
+                                        </select>
+                                        <button class="btn border" type="submit">Update Status</button>
+                                    </form>
+                                    <!-- <h5> <label for="">Status</label> </h5> -->
+
+                                </div>
+
+                            </div>
+                            <div class="card-body">
+                                <p>
+                                </p>
+                                <!-- <p><%=orderToDisplay.status %></p> -->
+                                <% for(product of orderToDisplay.products){ %>
+                                    <div class="d-flex   my-2">
+                                        <div>
+                                            <img src="/commonStatic/productImages/<%=product.productImages[0]  %> "
+                                                alt="" style="width: 200px">
+                                        </div>
+
+                                        <div class="ms-4 my-auto">
+                                            <h4> Name : <%=product.productName %>
+                                            </h4>
+                                            <h6>Quantity : <%=product.productQuantity %>
+                                            </h6>
+                                            <h6>Price : <%=product.productPrice %>
+                                            </h6>
+
+                                        </div>
+
+
+                                    </div>
+                                    <% } %>
+
+
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- <table id="example" class="display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Office</th>
+                                <th>Age</th>
+                                <th>Start date</th>
+                                <th>Salary</th>
+                            </tr>
+                        </thead> -->
+                <!-- <tbody>
+                            <tr>
+                                <td>Tiger Nixon</td>
+                                <td>System Architect</td>
+                                <td>Edinburgh</td>
+                                <td>61</td>
+                                <td>2011-04-25</td>
+                                <td>$320,800</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Office</th>
+                                <th>Age</th>
+                                <th>Start date</th>
+                                <th>Salary</th>
+                            </tr>
+                        </tfoot> -->
+                <!-- </table> -->
+
+
+            </div>
+
+            <!-- <script>
+                $(document).ready(function () {
+                    $('#example').DataTable({
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'copy', 'csv', 'excel', 'pdf', 'print'
+                        ]
+                    });
+                });
+            </script> -->
