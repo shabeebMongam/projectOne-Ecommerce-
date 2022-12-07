@@ -20,7 +20,9 @@ const orderSchema = new Schema(
                 orderedDate: {
                     type: Date,
                     default: Date.now
-                }
+                },
+                orderTotalPrice: Number,
+                paymentMethod: String
             }
 
         ]

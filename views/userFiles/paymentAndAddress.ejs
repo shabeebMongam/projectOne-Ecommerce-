@@ -37,8 +37,8 @@
                                                     </label>
                                                 </div>
                                                 <div>
-                                                    <a href="/removeAddress/<%=address  ._id%>"
-                                                        class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                                                    <a href="/removeAddress/<%=address  ._id%>" class="text-danger"><i
+                                                            class="fas fa-trash fa-lg"></i></a>
                                                 </div>
 
                                             </div>
@@ -101,7 +101,9 @@
                                             Subtotal
                                             <span>Gratis</span>
                                         </li> -->
-                                        <input type="text" name="cartTotal" value="<%= cartTotal %>" style="visibility: hidden;width:0px;height: 0px;">
+                                            <input type="text" id="hiddenTotalCart" name="cartTotal"
+                                                value="<%= cartTotal %>"
+                                                style="visibility: hidden;width:0px;height: 0px;">
                                             <li
                                                 class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                                                 <div>
@@ -110,12 +112,43 @@
                                                     <p class="mb-0">(including VAT)</p>
                                                 </strong> -->
                                                 </div>
-                                                <span><strong>
+                                                <div>
+                                                    <strong id="displayingTotalCart">
                                                         <%= cartTotal %>
-                                                    </strong></span>
+                                                    </strong>
+                                                </div>
+
                                             </li>
+                                            <li
+                                                class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                                <div>
+                                                    <input type="text" placeholder="Coupon Code" class="form-control"
+                                                        id="couponCode">
+                                                </div>
+                                                <div>
+                                                    <strong>
+                                                        <button class="btn border" type="button"
+                                                            onclick="applyCoupon('<%=userId%>','<%=cartTotal %>')">Apply</button>
+                                                    </strong>
+
+                                                </div>
+
+
+                                            </li>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3 w-100 "
+                                                style="visibility: hidden; height: 0; width:0;" id="couponAlert">
+                                                <div class="alert alert-warning alert-dismissible fade show w-100"
+                                                    role="alert">
+                                                    <strong id="alertMsg">Coupon Applied</strong>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                        aria-label="Close"></button>
+                                                </div>
+
+
+                                            </li>
+
                                         </ul>
-                                       
+
                                         <button type="submit" class="btn btn-primary btn-lg btn-block"
                                             onclick="checkingPaymentAndAddress()">
                                             Place Order
@@ -228,7 +261,7 @@
                             })
                         })
 
-            
+
 
                         function razorpayPayment(order) {
                             console.log(order);
@@ -277,10 +310,10 @@
                                     order
                                 },
                                 method: 'post',
-                                success:(response)=>{
-                                    if(response.status){
+                                success: (response) => {
+                                    if (response.status) {
                                         location.href = '/orderPlacedStatus'
-                                    }else{
+                                    } else {
                                         alert("Payment failed")
                                     }
                                 }
@@ -290,6 +323,75 @@
                     }
 
 
+                </script>
+
+                <script>
+                    function applyCoupon(userId, cartTotal) {
+                        console.log(userId);
+                        const couponCode = document.getElementById('couponCode').value
+
+                        console.log(document.getElementById('displayingTotalCart').innerHTML);  // 
+                        console.log(document.getElementById('hiddenTotalCart').value);
+
+
+                        $.ajax({
+                            url: '/applyCoupon',
+                            method: 'post',
+                            // data: $('#checkout-form').serialize(),
+                            data: { userId, couponCode },
+                            success: (response) => {
+                                // console.log("ggrr");
+                                console.log(response);
+
+                                if (response.status == 'couponAlreadyUsedByThisUser') {
+                                    // console.log("fafdsfsad");
+                                    document.getElementById('couponAlert').style.visibility = 'visible'
+                                    document.getElementById('couponAlert').style.height = 'auto'
+                                    document.getElementById('couponAlert').style.width = 'auto'
+                                    document.getElementById('alertMsg').innerText = "Used Once"
+
+                                } else if (response.status == 'couponLimitExceeded') {
+                                    document.getElementById('couponAlert').style.visibility = 'visible'
+                                    document.getElementById('couponAlert').style.height = 'auto'
+                                    document.getElementById('couponAlert').style.width = 'auto'
+                                    document.getElementById('alertMsg').innerText = "Coupon expired"
+                                }
+                                else if (response.status == 'couponApplied') {
+                                    document.getElementById('couponAlert').style.visibility = 'visible'
+                                    document.getElementById('couponAlert').style.height = 'auto'
+                                    document.getElementById('couponAlert').style.width = 'auto'
+                                    const percentageToBeDeducted = parseInt(response.percentage)
+                                    console.log(percentageToBeDeducted);
+                                    console.log(typeof (percentageToBeDeducted));
+                                    const amountToBeDeductedFromTotalCart = (percentageToBeDeducted / 100) * cartTotal
+                                    console.log(amountToBeDeductedFromTotalCart);
+                                    const cartPriceAfterApplingCoupon = Math.floor(cartTotal - amountToBeDeductedFromTotalCart)
+                                    console.log(cartPriceAfterApplingCoupon);
+                                    document.getElementById('displayingTotalCart').innerHTML = cartPriceAfterApplingCoupon
+                                    document.getElementById('hiddenTotalCart').value = cartPriceAfterApplingCoupon
+
+
+                                    // document.getElementById('alertMsg').innerText = "Coupon expired"
+                                }
+
+                                // if (response.paymentType === 'cod') {
+                                //     console.log(response);
+                                //     location.href = '/orderPlacedStatus'
+
+                                // } else if (response.paymentType === 'onlinePayment') {
+                                //     razorpayPayment(response.order)
+                                //     console.log("Evide ethi");
+                                //     console.log(response.order);
+                                // }
+                            }
+                        })
+
+
+
+                        // document.getElementById('cartTotalView').innerHTML = "SHABEEB";
+                        // console.log($("#couponCode").html);
+                        // console.log($("#cartTotalView").html);
+                    }                                    
                 </script>
 
 

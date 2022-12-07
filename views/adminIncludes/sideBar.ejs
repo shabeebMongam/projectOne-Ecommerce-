@@ -118,6 +118,27 @@
                                                                                         </a>
                                                                                     </li>
                                                                                     <% } %>
+                                                                                        <% if(coupon){ %>
+                                                                                            <li
+                                                                                                class="sidebar-item active">
+                                                                                                <a href="/admin/showOrder"
+                                                                                                    class='sidebar-link'>
+                                                                                                    <i
+                                                                                                        class="bi bi-archive"></i>
+                                                                                                    <span>Coupon</span>
+                                                                                                </a>
+                                                                                            </li>
+                                                                                            <% }else{ %>
+                                                                                                <li
+                                                                                                    class="sidebar-item  ">
+                                                                                                    <a href="/admin/showCoupon"
+                                                                                                        class='sidebar-link'>
+                                                                                                        <i
+                                                                                                            class="bi bi-archive"></i>
+                                                                                                        <span>Coupon</span>
+                                                                                                    </a>
+                                                                                                </li>
+                                                                                                <% } %>
 
 
 

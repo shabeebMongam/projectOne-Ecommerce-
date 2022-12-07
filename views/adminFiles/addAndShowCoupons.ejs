@@ -1,0 +1,166 @@
+<%- include('../adminIncludes/adminHeader') %>
+
+    <div id="app">
+        <%- include('../adminIncludes/sidebar') %>
+
+            <div id="main">
+                <div class="page-heading">
+
+
+                    <section class="section">
+                        <div class="row" id="table-hover-row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-header d-flex">
+                                        <div class=" w-100">
+                                            <h3 class="">COUPONS</h3>
+
+                                        </div>
+
+                                        <!-- <div class="container-fluid w-100 my-auto">
+                                            <form action="/admin/addCategory" class="d-flex justify-content-end " method="post">                                     
+                                              <input type="text" class="border rounded " name="category" required>                                      
+                                              <button type="submit" class="ms-3 rounded border ">Add Category</button>                                       
+                                            </form>
+                                          </div> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+                    <section class="section ">
+                        <div class="row" id="table-hover-row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-content">
+
+                                        <!-- table hover -->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+
+
+
+
+
+                    <section class="section">
+                        <div class="row">
+                            <div class="col-12 col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Active Coupons</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <form class="form" action="/admin/addCoupon" method="post">
+                                            <div class="row">
+                                                <div class="mb-3">
+                                                    <label for="code" class="form-label">Coupon Code
+                                                    </label>
+                                                    <input class="form-control" type="text" id="code" name="code"
+                                                        maxlength="10" required />
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="percentage">Percentage</label>
+                                                        <input type="number" min="1" max="100" id="percentage"
+                                                            class="form-control" name="percentage" required />
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6 col-12">
+                                                    <div class="form-group">
+                                                        <label for="quantity">Quantity</label>
+                                                        <input type="number" id="quantity" class="form-control"
+                                                            name="quantity" required />
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="w-100 ps-3 h-100">
+                                                    <div class="mt-1">
+                                                        <label for="floatingTextarea2">Description</label>
+                                                        <textarea class="form-control" id="floatingTextarea2"
+                                                            style="height: 100px" name="bannerDescription"
+                                                            required></textarea>
+                                                    </div>
+                                                </div> -->
+
+
+                                                <div class="col-12 d-flex justify-content-end mt-4">
+                                                    <button type="submit" class="btn btn-primary me-1 mb-1">
+                                                        Submit
+                                                    </button>
+                                                    <button type="reset" class="btn btn-light-secondary me-1 mb-1">
+                                                        Reset
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Add Coupon</h4>
+                                    </div>
+                                    <div class="mx-3 table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Code</th>
+                                                    <th>Percentage</th>
+                                                    <th>Status</th>
+                                                    <!-- <th>DESCRIPTION</th> -->
+                                                    <th>Action</th>
+
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% for(coupon of allCoupons){%>
+                                                    <tr>
+                                                        <td>
+                                                            <%= coupon.code %>
+                                                        </td>
+                                                        <td>
+                                                            <%= coupon.percentage %> %
+                                                        </td>
+
+                                                        <%if(coupon.quantity> coupon.usedBy.length ){
+                                                            %>
+                                                            <td>Active - Used
+                                                                (<%=coupon.usedBy.length%> /
+                                                                    <%=coupon.quantity%>
+                                                                        )
+                                                            </td>
+                                                            <% }else{ %>
+                                                                <td>ExpiredUsed
+                                                                    (<%=coupon.usedBy.length%> /
+                                                                        <%=coupon.quantity%>
+                                                                            )</td>
+                                                                <% } %>
+                                                                    <td><a class="btn border">Delete</a></td>
+                                                    </tr>
+                                                    <% } %>
+
+
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </section>
+
+
+                </div>
+            </div>
+
+            <%- include('../adminIncludes/adminFooter') %>

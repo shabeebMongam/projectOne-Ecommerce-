@@ -7,7 +7,7 @@ const multer = require('multer');
 const Product = require('../models/productModel');
 const Category = require('../models/categoryModel');
 const { isAdminLoggedIn } = require('../middleware/loginChecking/checkingAdminSession');
-const { getAdminDashboard, getAdminLogin, getAdminUsers, getUserBlock, postAdminLogin, getUserUnblock, getShowProduct, getShowCategory, getShowSpecificCategory, getAddProducts, getEditProduct, postDeleteProduct, getAddBanner, postAddProduct, postEditProduct, postAddCategory, postAddBanner, getShowOrders, getShowCoupon, getDetailsOfEachOrders } = require('../controllers/adminController');
+const { getAdminDashboard, getAdminLogin, getAdminUsers, getUserBlock, postAdminLogin, getUserUnblock, getShowProduct, getShowCategory, getShowSpecificCategory, getAddProducts, getEditProduct, postDeleteProduct, getAddBanner, postAddProduct, postEditProduct, postAddCategory, postAddBanner, getShowOrders, getShowCoupon, getDetailsOfEachOrders, postAddCoupon } = require('../controllers/adminController');
 
 
 const fileStorageEngine = multer.diskStorage({
@@ -39,7 +39,7 @@ router.route('/addCategory').post(upload.single('categoryImage'), postAddCategor
 router.route('/showOrder').get(getShowOrders)
 router.route('/showCoupon').get(getShowCoupon)
 router.route('/showOrderDetailes/:userId/:orderId').get(getDetailsOfEachOrders)
-
+router.post('/addCoupon', postAddCoupon)
 
 
 module.exports = router

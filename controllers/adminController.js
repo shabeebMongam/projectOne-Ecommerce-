@@ -6,6 +6,7 @@ const Category = require('../models/categoryModel');
 const { handleAsync } = require('../middleware/handlingAsync/handleAsync');
 const Banner = require('../models/bannerModel');
 const Order = require('../models/orderModel');
+const Coupon = require('../models/couponModel');
 
 
 
@@ -156,9 +157,11 @@ exports.getShowOrders = async (req, res) => {
 }
 exports.getShowCoupon = async (req, res) => {
 
+    const allCoupons = await Coupon.find({})
+    console.log(allCoupons);
 
 
-    res.render('adminFiles/showCoupon', { dashboard: false, users: false, products: false, category: false, banner: false, order: false, coupon: true })
+    res.render('adminFiles/addAndShowCoupons', { dashboard: false, users: false, products: false, category: false, banner: false, order: false, coupon: true, allCoupons })
 }
 
 exports.getLogOut = (req, res) => {
@@ -384,4 +387,22 @@ exports.postAddBanner = (req, res) => {
     newBanner.save().then(console.log("Banner Added"))
     res.redirect('/admin/addBanner')
 
-}   
+}
+
+exports.postAddCoupon = (req, res) => {
+
+    const { code, percentage, quantity } = req.body
+    console.log(req.body);
+
+    const newCoupon = new Coupon({
+        code,
+        percentage,
+        quantity
+    })
+
+    newCoupon.save().then(console.log("Saved Coupon"))
+
+
+
+}
+

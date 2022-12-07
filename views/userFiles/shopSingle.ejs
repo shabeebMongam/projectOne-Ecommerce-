@@ -683,7 +683,9 @@
                             method: 'post',
                             success: (response) => {
                                 console.log(response);
+                                $('#cartLength').text(response.cartLength)
                                 if (response.status == true) {
+                                    console.log(response.cartLength);
                                     const Toast = Swal.mixin({
                                         toast: true,
                                         position: 'top-end',
@@ -695,11 +697,13 @@
                                             toast.addEventListener('mouseleave', Swal.resumeTimer)
                                         }
                                     })
-
                                     Toast.fire({
                                         icon: 'success',
                                         title: 'Added to cart'
                                     })
+                                } else if (response.status == false) {
+                                    console.log("ya");
+                                    location = "/login"
                                 }
                             }
                         })
