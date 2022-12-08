@@ -22,7 +22,8 @@ const orderSchema = new Schema(
                     default: Date.now
                 },
                 orderTotalPrice: Number,
-                paymentMethod: String
+                paymentMethod: String,
+                shippingAddress: String
             }
 
         ]

@@ -1,36 +1,55 @@
+let inArray = []
+let dataToBeShown = document.getElementById("dataToSend").innerText
+console.log(typeof (dataToBeShown));
+console.log(dataToBeShown);
+
+let splited = dataToBeShown.split(',')
+console.log(splited);
+for (count of splited) {
+	inArray.push(Number(count))
+}
+// inArray.push(dataToBeShown)
+console.log(inArray);
+
+let codCount = Number(document.getElementById('codCount').innerText)
+let onlineCount = Number(document.getElementById('onlineCount').innerText)
+console.log(typeof (codCount));
+console.log(typeof (onlineCount));
+
+
 var optionsProfileVisit = {
 	annotations: {
 		position: 'back'
 	},
 	dataLabels: {
-		enabled:false
+		enabled: false
 	},
 	chart: {
 		type: 'bar',
 		height: 300
 	},
 	fill: {
-		opacity:1
+		opacity: 1
 	},
 	plotOptions: {
 	},
 	series: [{
 		name: 'sales',
-		data: [9,20,30,20,10,20,30,20,10,20,30,100]
+		data: inArray
 	}],
 	colors: '#435ebe',
 	xaxis: {
-		categories: ["Jan","Feb","Mar","Apr","May","Jun","Jul", "Aug","Sep","Oct","Nov","Dec"],
+		categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 	},
 }
-let optionsVisitorsProfile  = {
-	series: [70, 30],
-	labels: ['Male', 'Female'],
-	colors: ['#435ebe','#55c6e8'],
+let optionsVisitorsProfile = {
+	series: [codCount, onlineCount,],
+	labels: ['COD', 'Online'],
+	colors: ['#435ebe', '#55c6e8'],
 	chart: {
 		type: 'donut',
 		width: '100%',
-		height:'350px'
+		height: '350px'
 	},
 	legend: {
 		position: 'bottom'
@@ -47,13 +66,13 @@ let optionsVisitorsProfile  = {
 var optionsEurope = {
 	series: [{
 		name: 'series1',
-		data: [310, 800, 600, 430, 540, 340, 605, 805,430, 540, 340, 605]
+		data: [310, 800, 600, 430, 540, 340, 605, 805, 430, 540, 340, 605]
 	}],
 	chart: {
 		height: 80,
 		type: 'area',
 		toolbar: {
-			show:false,
+			show: false,
 		},
 	},
 	colors: ['#5350e9'],
@@ -61,28 +80,28 @@ var optionsEurope = {
 		width: 2,
 	},
 	grid: {
-		show:false,
+		show: false,
 	},
 	dataLabels: {
 		enabled: false
 	},
 	xaxis: {
 		type: 'datetime',
-		categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z","2018-09-19T07:30:00.000Z","2018-09-19T08:30:00.000Z","2018-09-19T09:30:00.000Z","2018-09-19T10:30:00.000Z","2018-09-19T11:30:00.000Z"],
+		categories: ["2018-09-19T00:00:00.000Z", "2018-09-19T01:30:00.000Z", "2018-09-19T02:30:00.000Z", "2018-09-19T03:30:00.000Z", "2018-09-19T04:30:00.000Z", "2018-09-19T05:30:00.000Z", "2018-09-19T06:30:00.000Z", "2018-09-19T07:30:00.000Z", "2018-09-19T08:30:00.000Z", "2018-09-19T09:30:00.000Z", "2018-09-19T10:30:00.000Z", "2018-09-19T11:30:00.000Z"],
 		axisBorder: {
-			show:false
+			show: false
 		},
 		axisTicks: {
-			show:false
+			show: false
 		},
 		labels: {
-			show:false,
+			show: false,
 		}
 	},
-	show:false,
+	show: false,
 	yaxis: {
 		labels: {
-			show:false,
+			show: false,
 		},
 	},
 	tooltip: {
@@ -109,8 +128,12 @@ var chartEurope = new ApexCharts(document.querySelector("#chart-europe"), option
 var chartAmerica = new ApexCharts(document.querySelector("#chart-america"), optionsAmerica);
 var chartIndonesia = new ApexCharts(document.querySelector("#chart-indonesia"), optionsIndonesia);
 
+
 chartIndonesia.render();
 chartAmerica.render();
 chartEurope.render();
 chartProfileVisit.render();
-chartVisitorsProfile.render()
+chartVisitorsProfile.render();
+
+
+

@@ -13,6 +13,7 @@ const { findById } = require('../models/cartModel');
 var ObjectId = require('mongodb').ObjectID;
 var mongoose = require('mongoose');
 const Coupon = require('../models/couponModel');
+const { find } = require('../models/orderModel');
 const instance = new Razorpay({ key_id: 'rzp_test_nskbaOm2bho9QL', key_secret: 'hC8hOtH65DFfZ52JZgcuuTrc' })
 
 
@@ -225,28 +226,62 @@ exports.getCart = async (req, res) => {
 }
 
 exports.getSelectAddressAndPayment = async (req, res) => {
-    const { cartTotal } = req.body
+    // const {  } = req.body
+    const cartTotal = req.params.total
     if (req.session.userLoggedIn) {
         const userName = req.session.loggedUserName
         const userId = req.session.loggedUserId
+        const checkingCartHaveItems = await Cart.find({ userId: userId })
+        console.log(checkingCartHaveItems);
 
-        const toFindUserAddress = await User.findOne({ _id: userId })
-        const savedAddress = toFindUserAddress.address
-        console.log(savedAddress);
+        if (checkingCartHaveItems[0].products.length > 0) {
+            const toFindUserAddress = await User.findOne({ _id: userId })
+            const savedAddress = toFindUserAddress.address
+            console.log(savedAddress);
 
-        const numberOfProductsInCart = await Cart.find({ userId: userId })
-        // console.log(numberOfProductsInCart[0].products.length);
-        if ((await numberOfProductsInCart).length > 0) {
-            cartLength = numberOfProductsInCart[0].products.length
+            const numberOfProductsInCart = await Cart.find({ userId: userId })
+            // console.log(numberOfProductsInCart[0].products.length);
+            if ((await numberOfProductsInCart).length > 0) {
+                cartLength = numberOfProductsInCart[0].products.length
+            } else {
+                cartLength = 0
+            }
+
+            res.render('userFiles/paymentAndAddress', { user: true, usersName: userName, userId, savedAddress, cartTotal, cartLength })
         } else {
-            cartLength = 0
+            console.log("No Items in cart");
+            res.redirect('/shop')
         }
 
-        res.render('userFiles/paymentAndAddress', { user: true, usersName: userName, userId, savedAddress, cartTotal, cartLength })
+
+
+
+
     } else {
         res.redirect('/login')
     }
 }
+
+// exports.getSelectAddressAndPayment = async (req, res) => {
+//     const { total } = req.params
+
+//     if (req.session.userLoggedIn) {
+//         const userName = req.session.loggedUserName
+//         const userId = req.session.loggedUserId
+
+//         const toFindUserAddress = await User.findOne({ _id: userId })
+//         const savedAddress = toFindUserAddress.address
+//         console.log(savedAddress);
+
+
+//         res.render('userFiles/paymentAndAddress', { user: true, usersName: userName, userId, savedAddress, cartTotal: total })
+//     } else {
+//         res.redirect('/login')
+//     }
+// }
+
+
+
 
 exports.getProfile = async (req, res) => {
     if (req.session.userLoggedIn) {
@@ -324,12 +359,27 @@ exports.getOrders = async (req, res) => {
         const userId = req.session.loggedUserId
         const userName = req.session.loggedUserName
 
+        const userIdInObjectId = new ObjectId(userId)
+
+        console.log(userIdInObjectId);
+        console.log(userId);
+        // const ordersOfUser = Order
+
+
+
         const userOrders = await Order.aggregate([
+            {
+                '$match': {
+                    userId: userIdInObjectId
+                },
+            },
             {
                 '$unwind': {
                     'path': '$orders'
                 }
-            }, {
+            },
+            {
+
                 '$sort': {
                     'orders.orderedDate': -1
                 }
@@ -338,7 +388,7 @@ exports.getOrders = async (req, res) => {
             //     $unwind:{
             //         path:'$orders.products'
             //     }
-            // }
+
 
         ])
 
@@ -352,7 +402,7 @@ exports.getOrders = async (req, res) => {
 
         const numberOfProductsInCart = await Cart.find({ userId: userId })
         // console.log(numberOfProductsInCart[0].products.length);
-        if ((await numberOfProductsInCart).length > 0) {
+        if ((numberOfProductsInCart).length > 0) {
             cartLength = numberOfProductsInCart[0].products.length
         } else {
             cartLength = 0
@@ -366,15 +416,19 @@ exports.getOrders = async (req, res) => {
 }
 
 exports.getOrderPlacedStatus = async (req, res) => {
+
+
+    const { paymentMode, totalCart, address } = req.params
     const userId = req.session.loggedUserId
     const userName = req.session.loggedUserName
+    const userIdInObjectId = new ObjectId(userId)
     const numberOfProductsInCart = await Cart.find({ userId: userId })
 
 
     const lastOrderOfUser = await Order.aggregate([
         {
             '$match': {
-                'userId': ObjectId('636bbd026108a89aa317c428')
+                userId: userIdInObjectId
             }
         },
         {
@@ -743,34 +797,15 @@ exports.postAddAddress = async (req, res) => {
 }
 
 
-exports.getSelectAddressAndPayment = async (req, res) => {
-    const { total } = req.params
-
-    if (req.session.userLoggedIn) {
-        const userName = req.session.loggedUserName
-        const userId = req.session.loggedUserId
-
-        const toFindUserAddress = await User.findOne({ _id: userId })
-        const savedAddress = toFindUserAddress.address
-        console.log(savedAddress);
-
-
-        res.render('userFiles/paymentAndAddress', { user: true, usersName: userName, userId, savedAddress, cartTotal: total })
-    } else {
-        res.redirect('/login')
-    }
-}
 
 
 
 exports.postOrderPlaced = async (req, res) => {
+
+    const { address, payment, cartTotal } = req.body
+
     console.log(req.body);
-
-    console.log("At cod");
-
-    console.log("From orderPlaced COD");
     const userId = req.session.loggedUserId
-    console.log(req.body);
 
     const cartOfUser = await Cart.find({ userId: userId })
     const products = cartOfUser[0].products
@@ -786,12 +821,15 @@ exports.postOrderPlaced = async (req, res) => {
 
         let productsToPush = []
 
-        for (product of products) {
+        for (let product of products) {
             productsToPush.push(product)
         }
         console.log(productsToPush[0]);
         previousOrdersOfUser[0].orders.push({
-            products: productsToPush
+            products: productsToPush,
+            orderTotalPrice: cartTotal,
+            paymentMethod: payment,
+            shippingAddress: address
         })
 
         console.log("After");
@@ -838,7 +876,7 @@ exports.postOrderPlaced = async (req, res) => {
                     // }
                 }, (err, order) => {
                     console.log(order);
-                    res.json({ paymentType: "onlinePayment", order })
+                    res.json({ paymentType: "onlinePayment" })
                 })
             }
             generateRazorpay()
@@ -851,22 +889,32 @@ exports.postOrderPlaced = async (req, res) => {
 
         const orderedProducts = []
 
-        for (product of products) {
+        for (let product of products) {
             orderedProducts.push(product)
         }
 
+        let orderId = ''
 
         const newOrder = new Order({
             userId: userId,
             orders: [{
-                products: orderedProducts
+                products: orderedProducts,
+                orderTotalPrice: cartTotal,
+                paymentMethod: payment,
+                shippingAddress: address
             }]
         })
 
         await newOrder.save().then((savedOrder) => {
-            console.log("Order Saved")
-            console.log(savedOrder);
-            console.log("Order Saved")
+
+
+            console.log("Added new order for new user")
+            const lastOfOrders = savedOrder.orders.length
+            console.log(lastOfOrders);
+            orderId = savedOrder.orders[lastOfOrders - 1]._id
+            console.log(savedOrder.orders[lastOfOrders - 1]._id);
+            console.log("Added new order for new user")
+
         })
 
         const cartOfUserToClean = await Cart.find({ userId: userId })
@@ -879,7 +927,7 @@ exports.postOrderPlaced = async (req, res) => {
         await cartOfUserToClean[0].save().then(console.log("Cart cleaned"))
 
         if (req.body.payment === "cod") {
-            res.json({ paymentType: "cod" })
+            res.json({ paymentType: "cod"})
         } else if (req.body.payment === "online") {
 
             let orderIdInString = orderId.toString()
@@ -891,7 +939,7 @@ exports.postOrderPlaced = async (req, res) => {
 
             function generateRazorpay() {
                 instance.orders.create({
-                    amount: totalAmount,
+                    amount: totalAmount * 100,
                     currency: "INR",
                     receipt: orderIdInString,
                     // notes: {
@@ -900,7 +948,7 @@ exports.postOrderPlaced = async (req, res) => {
                     // }
                 }, (err, order) => {
                     console.log(order);
-                    res.json({ paymentType: "onlinePayment", order })
+                    res.json({ paymentType: "onlinePayment"})
                 })
             }
             generateRazorpay()

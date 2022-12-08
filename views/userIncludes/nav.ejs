@@ -79,7 +79,7 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                            <li><a class="dropdown-item" href="/logout">Logout</a></li>
                         </ul>
                     </div>
 
@@ -101,9 +101,10 @@
 
                     <% }else{ %>
 
-                        <div>
-                            <button class="btn border rounded-pill"> <span><a href="/login">Login</a></span> /
-                                <span><a href="/register">
+                        <div class="">
+                            <button class="btn border rounded-pill bg-success"> <span><a href="/login"
+                                        class="text-decoration-none text-light">Login</a></span> /
+                                <span><a href="/register" class="text-decoration-none text-light">
                                         Register</a></span></button>
                         </div>
                         <% } %>

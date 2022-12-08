@@ -7,7 +7,8 @@ const { handleAsync } = require('../middleware/handlingAsync/handleAsync');
 const Banner = require('../models/bannerModel');
 const Order = require('../models/orderModel');
 const Coupon = require('../models/couponModel');
-
+const { deleteOne } = require('../models/orderModel');
+var ObjectId = require('mongodb').ObjectID;
 
 
 
@@ -16,9 +17,119 @@ exports.getAdminLogin = (req, res) => {
     res.render('adminFiles/adminLogin')
 }
 
-exports.getAdminDashboard = (req, res, next) => {
+exports.getAdminDashboard = async (req, res, next) => {
 
-    res.render('adminFiles/showDashboard', { dashboard: true, users: false, products: false, category: false, banner: false, order: false, coupon: false })
+    let salesCount = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+    const salesData = await Order.aggregate([
+        {
+            '$unwind': {
+                'path': '$orders'
+            }
+        },
+        {
+            '$project':
+            {
+                year: { $year: "$orders.orderedDate" },
+                month: { $month: "$orders.orderedDate" },
+
+            }
+        },
+    ])
+    // console.log(salesData);
+
+    for (month of salesData) {
+        let whichMonth = month.month
+        console.log(typeof (whichMonth));
+        salesCount[whichMonth - 1] = salesCount[whichMonth - 1] + 1
+    }
+
+    // console.log(salesCount);
+
+    let codCount = 0
+    let onlineCount = 0
+
+    const paymentMode = await Order.aggregate([
+        {
+            '$unwind': {
+                'path': '$orders'
+            }
+        },
+        {
+            '$project':
+            {
+                "orders.paymentMethod": 1
+
+            }
+        },
+    ])
+    console.log(paymentMode);
+    for (mode of paymentMode) {
+        let whichMode = mode.orders.paymentMethod
+
+        if (whichMode === 'cod') {
+            codCount = codCount + 1
+        } else if (whichMode === 'online') {
+            onlineCount = onlineCount + 1
+        }
+
+        // salesCount[whichMonth - 1] = salesCount[whichMonth - 1] + 1
+    }
+    console.log(onlineCount);
+    console.log(codCount);
+
+    const users = await User.find({})
+    const usersCount = users.length
+
+
+    let pendingCount = 0
+    let packedCount = 0
+    let shippedCount = 0
+    let deliveredCount = 0
+
+    const pendingOrders = await Order.aggregate([
+        {
+            '$unwind': {
+                'path': '$orders'
+            }
+        },
+        {
+            '$project':
+            {
+                "orders.status": 1
+
+            }
+        },
+    ])
+
+    console.log(pendingOrders);
+    for (orderStatus of pendingOrders) {
+        let whichStatus = orderStatus.orders.status
+
+        if (whichStatus === 'Pending') {
+            pendingCount = pendingCount + 1
+        } else if (whichStatus === 'Packed') {
+            packedCount = packedCount + 1
+        }
+        else if (whichStatus === 'Shipped') {
+            shippedCount = shippedCount + 1
+        }
+        else if (whichStatus === 'Delivered') {
+            deliveredCount = deliveredCount + 1
+        }
+    }
+
+    console.log(pendingCount);
+    console.log(packedCount);
+    console.log(shippedCount);
+    console.log(deliveredCount);
+
+    const admin = await Admin.find({})
+    const adminMail = admin[0].email
+    console.log(admin[0].email);
+
+
+    res.render('adminFiles/showDashboard', { dashboard: true, users: false, products: false, category: false, banner: false, order: false, coupon: false, salesCount, codCount, onlineCount, usersCount, pendingCount, packedCount, shippedCount, deliveredCount, adminMail })
 }
 
 exports.getAdminUsers = handleAsync(async (req, res) => {
@@ -174,6 +285,9 @@ exports.getDetailsOfEachOrders = async (req, res) => {
     const userId = req.params.userId
     const orderId = req.params.orderId
 
+    const userIdInObjectId = new ObjectId(userId)
+    const orderIdInObjectId = new ObjectId(orderId)
+
 
 
 
@@ -192,49 +306,33 @@ exports.getDetailsOfEachOrders = async (req, res) => {
 
     let productsOfOrders = userOfOrder[0].orders[indexOfThisProduct].products
 
-    // console.log(productsOfOrders);
+    const orderStatus = await Order.aggregate([
+        {
+            '$match': {
+                'userId': userIdInObjectId
+            }
+        }, {
+            '$unwind': {
+                'path': '$orders'
+            }
+        }, {
+            '$match': {
+                'orders._id': orderIdInObjectId
+            }
+        }, {
+            '$project': {
+                'orders.status': 1
+            }
+        }
+    ])
 
-    // const user = await Order.aggregate([
-    //     {
-    //         '$unwind':{
-    //             'path':'$orders'
-    //         }
-    //     },
-    //     {
-    //         '$unwind':{
-    //             'path':'$orders.products'
-    //         }
-    //     },
-    //     {
-    //         '$project':{
+    console.log(orderStatus);
 
-    //         }
-    //     }
-    // ])        
+    const orderStatusToDisplay = orderStatus[0].orders.status
 
-    // const allOrdersOfUsers = await Order.aggregate([
-    //     {
-    //       '$unwind': {
-    //         'path': '$orders'
-    //       }
-    //     }, {
-    //       '$sort': {
-    //         'orders.orderedDate': -1
-    //       }
-    //     },
-    //     {
-    //         $unwind:{
-    //             path:'$orders.products'
-    //         }
-    //     }
+    console.log(orderStatusToDisplay);
 
-    //   ])
-
-
-    //   console.log(user);
-    //   console.log(user[0].orders[0]);
-
-    res.render('adminFiles/showDetailesOfEachOrders', { dashboard: false, users: false, products: false, category: false, banner: false, order: true, coupon: false, orderToDisplay, userIdOfTheUser })
+    res.render('adminFiles/showDetailesOfEachOrders', { dashboard: false, users: false, products: false, category: false, banner: false, order: true, coupon: false, orderToDisplay, userIdOfTheUser, orderStatusToDisplay })
 }
 
 
@@ -401,6 +499,8 @@ exports.postAddCoupon = (req, res) => {
     })
 
     newCoupon.save().then(console.log("Saved Coupon"))
+
+    res.redirect('/admin/showCoupon')
 
 
 

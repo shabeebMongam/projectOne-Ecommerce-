@@ -29,17 +29,38 @@
                                         -- <%= orderToDisplay.orderedDate.toLocaleTimeString('en-US') %>
                                 </h4>
 
-                                <div>
+                                <div class="w-25">
 
                                     <form action="/updateOrderStatus/<%=userIdOfTheUser%>/<%=orderToDisplay._id %> "
-                                        method="post">
+                                        method="post" class="d-flex">
                                         <select id="cars" class="border border-rounded form-select" name="orderStatus">
-                                            <option value="packed">Packed</option>
-                                            <option value="shipped">Shipped</option>
-                                            <option value="delivered">Delivered</option>
-                                            <!-- <option value="audi">Audi</option> -->
+                                            <option value="<%=orderStatusToDisplay%>">
+                                                <%=orderStatusToDisplay%>
+                                            </option>
+
+                                            <% if(orderStatusToDisplay==='Packed' ){%>
+                                                <option value="Shipped">Shipped</option>
+                                                <option value="Delivered">Delivered</option>
+                                                <option value="Delivered">Pending</option>
+                                                <% }else if(orderStatusToDisplay==='Shipped' ){%>
+                                                    <option value="Packed">Packed</option>
+                                                    <option value="Delivered">Delivered</option>
+                                                    <option value="Delivered">Pending</option>
+
+                                                    <% }else if(orderStatusToDisplay==='Delivered' ){%>
+                                                        <option value="Packed">Packed</option>
+                                                        <option value="Shipped">Shipped</option>
+                                                        <option value="Delivered">Pending</option>
+
+                                                        <% }else if(orderStatusToDisplay==='Pending' ){ %>
+                                                            <option value="Packed">Packed</option>
+                                                            <option value="Shipped">Shipped</option>
+                                                            <option value="Delivered">Delivered</option>
+                                                            <% } %>
+
+
                                         </select>
-                                        <button class="btn border" type="submit">Update Status</button>
+                                        <button class="btn border w-100 ms-2" type="submit">Update Status</button>
                                     </form>
                                     <!-- <h5> <label for="">Status</label> </h5> -->
 
@@ -68,11 +89,24 @@
                                         </div>
 
 
+
+
                                     </div>
                                     <% } %>
 
-
+                                        <div class="text-end">
+                                            <h6>
+                                                Total : ₹ <%=orderToDisplay.orderTotalPrice %>
+                                            </h6>
+                                            <h6>
+                                                Payment Mode : <%=orderToDisplay.paymentMethod %>
+                                            </h6>
+                                            <!-- <h6>
+                                                <%=orderToDisplay.orderTotalPrice %>
+                                            </h6> -->
+                                        </div>
                             </div>
+
                         </div>
                     </section>
                 </div>
