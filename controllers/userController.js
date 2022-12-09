@@ -200,25 +200,32 @@ exports.getCart = handleAsync(async (req, res) => {
         const userId = req.session.loggedUserId
 
         const cartOfUser = await Cart.findOne({ userId })
-        console.log();
-        if (cartOfUser.products.length != 0) {
-            // console.log(cartOfUser); 
-            const isThereProductInCart = cartOfUser.products.length
-            // console.log(cartOfUser.products);
-            // console.log(isThereProductInCart);
+        console.log(cartOfUser);
 
-            const numberOfProductsInCart = await Cart.find({ userId: userId })
-            // console.log(numberOfProductsInCart[0].products.length);
-            if ((await numberOfProductsInCart).length > 0) {
-                cartLength = numberOfProductsInCart[0].products.length
+        if (cartOfUser != null) {
+            if (cartOfUser.products.length != 0) {
+                // console.log(cartOfUser); 
+                const isThereProductInCart = cartOfUser.products.length
+                // console.log(cartOfUser.products);
+                // console.log(isThereProductInCart);
+
+                const numberOfProductsInCart = await Cart.find({ userId: userId })
+                // console.log(numberOfProductsInCart[0].products.length);
+                if ((await numberOfProductsInCart).length > 0) {
+                    cartLength = numberOfProductsInCart[0].products.length
+                } else {
+                    cartLength = 0
+                }
+
+                res.render('userFiles/userCart', { user: true, usersName: userName, cartOfUser, userId, cartLength })
             } else {
-                cartLength = 0
+                return res.render('userFiles/emptyCart', { user: true, usersName: userName, userId, cartLength })
             }
-
-            res.render('userFiles/userCart', { user: true, usersName: userName, cartOfUser, userId, cartLength })
         } else {
             res.render('userFiles/emptyCart', { user: true, usersName: userName, userId, cartLength })
         }
+
+
     } else {
         res.redirect('/login')
 
@@ -460,34 +467,38 @@ exports.getWishlist = handleAsync(async (req, res) => {
         const userId = req.session.loggedUserId
         const wishlistOfUser = await Wishlist.find({ userId })
         console.log(wishlistOfUser.length);
-        console.log(wishlistOfUser[0]);
-        console.log(wishlistOfUser[0].products);
+        console.log(wishlistOfUser);
+        // console.log(wishlistOfUser[0].products);
 
-        if (wishlistOfUser[0].products.length > 0) {
-            let productsInWishlist = []
-            for (let eachProduct of wishlistOfUser[0].products) {
-                productId = eachProduct.product
-                console.log(productId);
+        if (wishlistOfUser.length > 0) {
+            if (wishlistOfUser[0].products.length > 0) {
+                let productsInWishlist = []
+                for (let eachProduct of wishlistOfUser[0].products) {
+                    productId = eachProduct.product
+                    console.log(productId);
 
-                let product = await Product.findById(productId)
+                    let product = await Product.findById(productId)
 
-                productsInWishlist.push(product)
+                    productsInWishlist.push(product)
 
 
+                }
+                console.log(productsInWishlist);
+
+
+                const numberOfProductsInCart = await Cart.find({ userId: userId })
+                // console.log(numberOfProductsInCart[0].products.length);
+                if ((await numberOfProductsInCart).length > 0) {
+                    cartLength = numberOfProductsInCart[0].products.length
+                } else {
+                    cartLength = 0
+                }
+
+                res.render('userFiles/userWishlist', { user: true, usersName: userName, userId, productsInWishlist, cartLength })
             }
-            console.log(productsInWishlist);
+        }
 
-
-            const numberOfProductsInCart = await Cart.find({ userId: userId })
-            // console.log(numberOfProductsInCart[0].products.length);
-            if ((await numberOfProductsInCart).length > 0) {
-                cartLength = numberOfProductsInCart[0].products.length
-            } else {
-                cartLength = 0
-            }
-
-            res.render('userFiles/userWishlist', { user: true, usersName: userName, userId, productsInWishlist, cartLength })
-        } else {
+        else {
             res.render('userFiles/emptyWishlist', { user: true, usersName: userName, userId })
         }
 

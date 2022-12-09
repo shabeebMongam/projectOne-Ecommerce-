@@ -41,27 +41,27 @@ app.use(nocache());
 app.use('/', userRoutes);
 app.use('/admin', adminRoutes);
 
-app.all('*', (req, res, next) => {
-    // res.render('error404')
-    const err = new Error()
-    err.message = "No routes"
-    err.status = 404
-    next(err)
+// app.all('*', (req, res, next) => {
+//     // res.render('error404')
+//     const err = new Error()
+//     err.message = "No routes"
+//     err.status = 404
+//     next(err)
 
-})
+// })
 
-app.use((err, req, res, next) => {
-    // res.send(err)
-    const adminOrUser = req.originalUrl.split('/')[1]
-    if (adminOrUser == "admin") {
-        res.render('error', { admin: true })
-    } else {
-        res.render('error', { admin: false })
-    }
-    // console.log(adminOrUser);
-    // console.log(err);
+// app.use((err, req, res, next) => {
+//     // res.send(err)
+//     const adminOrUser = req.originalUrl.split('/')[1]
+//     if (adminOrUser == "admin") {
+//         res.render('error', { admin: true })
+//     } else {
+//         res.render('error', { admin: false })
+//     }
+//     // console.log(adminOrUser);
+//     // console.log(err);
 
-})
+// })
 
 
 
