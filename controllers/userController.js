@@ -43,7 +43,7 @@ const client = require('twilio')(accountSid, authToken);
 
 
 
-exports.getMainPage = async (req, res) => {
+exports.getMainPage = handleAsync(async (req, res) => {
 
     const allBanners = await Banner.find({})
     const categories = await Category.find({})
@@ -77,7 +77,7 @@ exports.getMainPage = async (req, res) => {
         return res.render('userFiles/mainPage', { user: false, allBanners, categories, products })
 
     }
-}
+})
 
 
 exports.getShop = (req, res) => {
@@ -147,7 +147,7 @@ exports.getOtpVerify = (req, res) => {
     }
 }
 
-exports.getShopingSingle = async (req, res) => {
+exports.getShopingSingle = handleAsync(async (req, res) => {
     const productId = req.params.id
     const userName = req.session.loggedUserName
     const userId = req.session.loggedUserId
@@ -171,10 +171,10 @@ exports.getShopingSingle = async (req, res) => {
     } else {
         res.render('userFiles/shopSingle', { user: false, usersName: userName, thisProduct })
     }
-}
+})
 
 
-exports.getAbout = async (req, res) => {
+exports.getAbout = handleAsync(async (req, res) => {
     if (req.session.userLoggedIn) {
         const userName = req.session.loggedUserName
         const userId = req.session.loggedUserId
@@ -192,9 +192,9 @@ exports.getAbout = async (req, res) => {
     } else {
         res.render('userFiles/aboutUs', { user: false })
     }
-}
+})
 
-exports.getCart = async (req, res) => {
+exports.getCart = handleAsync(async (req, res) => {
     if (req.session.userLoggedIn) {
         const userName = req.session.loggedUserName
         const userId = req.session.loggedUserId
@@ -223,9 +223,9 @@ exports.getCart = async (req, res) => {
         res.redirect('/login')
 
     }
-}
+})
 
-exports.getSelectAddressAndPayment = async (req, res) => {
+exports.getSelectAddressAndPayment = handleAsync(async (req, res) => {
     // const {  } = req.body
     const cartTotal = req.params.total
     if (req.session.userLoggedIn) {
@@ -260,7 +260,7 @@ exports.getSelectAddressAndPayment = async (req, res) => {
     } else {
         res.redirect('/login')
     }
-}
+})
 
 // exports.getSelectAddressAndPayment = async (req, res) => {
 //     const { total } = req.params
@@ -283,7 +283,7 @@ exports.getSelectAddressAndPayment = async (req, res) => {
 
 
 
-exports.getProfile = async (req, res) => {
+exports.getProfile = handleAsync(async (req, res) => {
     if (req.session.userLoggedIn) {
         const userName = req.session.loggedUserName
         const userId = req.session.loggedUserId
@@ -303,9 +303,9 @@ exports.getProfile = async (req, res) => {
     } else {
         res.redirect('/login')
     }
-}
+})
 
-exports.getRemoveItemFromCart = async (req, res) => {
+exports.getRemoveItemFromCart = handleAsync(async (req, res) => {
     const productId = req.params.id
     const userId = req.session.loggedUserId
 
@@ -328,9 +328,9 @@ exports.getRemoveItemFromCart = async (req, res) => {
     }
     res.redirect('/cart')
 
-}
+})
 
-exports.getRemoveItemFromWishlist = async (req, res) => {
+exports.getRemoveItemFromWishlist = handleAsync(async (req, res) => {
     const productId = req.params.id
     const userId = req.session.loggedUserId
 
@@ -352,9 +352,9 @@ exports.getRemoveItemFromWishlist = async (req, res) => {
         }
     }
     res.redirect('/wishlist')
-}
+})
 
-exports.getOrders = async (req, res) => {
+exports.getOrders = handleAsync(async (req, res) => {
     if (req.session.userLoggedIn) {
         const userId = req.session.loggedUserId
         const userName = req.session.loggedUserName
@@ -413,9 +413,9 @@ exports.getOrders = async (req, res) => {
     } else {
         res.redirect('/login')
     }
-}
+})
 
-exports.getOrderPlacedStatus = async (req, res) => {
+exports.getOrderPlacedStatus = handleAsync(async (req, res) => {
 
 
     const { paymentMode, totalCart, address } = req.params
@@ -452,9 +452,9 @@ exports.getOrderPlacedStatus = async (req, res) => {
         cartLength = 0
     }
     res.render('userFiles/orderPlaced', { user: true, usersName: userName, userId, cartLength, detailesOfLastOrderOfUser })
-}
+})
 
-exports.getWishlist = async (req, res) => {
+exports.getWishlist = handleAsync(async (req, res) => {
     if (req.session.userLoggedIn) {
         const userName = req.session.loggedUserName
         const userId = req.session.loggedUserId
@@ -496,10 +496,10 @@ exports.getWishlist = async (req, res) => {
     } else {
         res.redirect('/login')
     }
-}
+})
 
 
-exports.postUpdateOrderStatus = async (req, res) => {
+exports.postUpdateOrderStatus = handleAsync(async (req, res) => {
     const userId = req.params.userId
     const orderId = req.params.orderId
 
@@ -518,9 +518,9 @@ exports.postUpdateOrderStatus = async (req, res) => {
 
     console.log(req.body);
     res.redirect('/admin/showOrder')
-}
+})
 
-exports.getFilterByCategory = async (req, res) => {
+exports.getFilterByCategory = handleAsync(async (req, res) => {
 
     const categoryId = req.params.categoryId
     const productsInSpecificCategory = await Product.find({ productCategory: categoryId })
@@ -541,9 +541,9 @@ exports.getFilterByCategory = async (req, res) => {
     console.log(productsInSpecificCategory);
 
     return res.render('userFiles/shopPage', { user: true, products: productsInSpecificCategory, usersName: userName, userId, cartLength, allCategories })
-}
+})
 
-exports.postRegister = async (req, res) => {
+exports.postRegister = handleAsync(async (req, res) => {
     const { name, password, number } = req.body
 
     const sameMobile = await User.find({ mobileNumber: number })
@@ -579,7 +579,7 @@ exports.postRegister = async (req, res) => {
             });
 
     }
-}
+})
 
 
 exports.postVerifyOtp = (req, res) => {
@@ -621,7 +621,7 @@ exports.postVerifyOtp = (req, res) => {
         });
 }
 
-exports.postLogin = async (req, res, next) => {
+exports.postLogin = handleAsync(async (req, res, next) => {
     const { loginNumber, loginPassword } = req.body
 
     try {
@@ -643,9 +643,9 @@ exports.postLogin = async (req, res, next) => {
         console.log(err);
 
     }
-}
+})
 
-exports.postAddToCArt = async (req, res) => {
+exports.postAddToCArt = handleAsync(async (req, res) => {
     if (req.session.userLoggedIn) {
 
         const productId = req.params.id
@@ -735,9 +735,9 @@ exports.postAddToCArt = async (req, res) => {
         console.log("No user");
         // res.redirect('/login')
     }
-}
+})
 
-exports.postChangeProductQuantity = async (req, res) => {
+exports.postChangeProductQuantity = handleAsync(async (req, res) => {
 
     console.log(req.body);
     const { userId, count, productId } = req.body
@@ -774,10 +774,10 @@ exports.postChangeProductQuantity = async (req, res) => {
     }
 
 
-}
+})
 
 
-exports.postAddAddress = async (req, res) => {
+exports.postAddAddress = handleAsync(async (req, res) => {
     const { cartTotal } = req.params
     console.log(req.body);
     const { name, address, zipCode, mobileNumber, alternateMobileNumber } = req.body
@@ -795,13 +795,13 @@ exports.postAddAddress = async (req, res) => {
         })
     }
     res.redirect(`/selectAddressAndPayment/${cartTotal}`)
-}
+})
 
 
 
 
 
-exports.postOrderPlaced = async (req, res) => {
+exports.postOrderPlaced = handleAsync(async (req, res) => {
 
     const { address, payment, cartTotal } = req.body
 
@@ -957,10 +957,10 @@ exports.postOrderPlaced = async (req, res) => {
 
         }
     }
-}
+})
 
 
-exports.postWishList = async (req, res) => {
+exports.postWishList = handleAsync(async (req, res) => {
 
     if (req.session.userLoggedIn) {
         const productId = req.params.id
@@ -1018,9 +1018,9 @@ exports.postWishList = async (req, res) => {
     }
 
 
-}
+})
 
-exports.postVerifyPayment = async (req, res) => {
+exports.postVerifyPayment = handleAsync(async (req, res) => {
     const orderId = req.body.payment.razorpay_order_id
     const paymentId = req.body.payment.razorpay_payment_id
     const signature = req.body.payment.razorpay_signature
@@ -1038,9 +1038,9 @@ exports.postVerifyPayment = async (req, res) => {
         res.json({ status: false })
         console.log("BAd");
     }
-}
+})
 
-exports.getEditProfile = async (req, res) => {
+exports.getEditProfile = handleAsync(async (req, res) => {
     if (req.session.userLoggedIn) {
         const userName = req.session.loggedUserName
         const userId = req.session.loggedUserId
@@ -1053,9 +1053,9 @@ exports.getEditProfile = async (req, res) => {
     } else {
         res.redirect('/login')
     }
-}
+})
 
-exports.postEditProfile = async (req, res) => {
+exports.postEditProfile = handleAsync(async (req, res) => {
     const { name, number, email } = req.body
     const userId = req.session.loggedUserId
     // const updated = await User.findByIdAndUpdate(userId, { name:name,mobileNumber:number,email })
@@ -1071,9 +1071,9 @@ exports.postEditProfile = async (req, res) => {
     console.log(updated);
     console.log("dasdas");
     res.redirect('/profile')
-}
+})
 
-exports.getAddToCartFromWishlist = async (req, res) => {
+exports.getAddToCartFromWishlist = handleAsync(async (req, res) => {
     if (req.session.userLoggedIn) {
         const productId = req.params.id
         const userId = req.session.loggedUserId
@@ -1169,9 +1169,9 @@ exports.getAddToCartFromWishlist = async (req, res) => {
         res.redirect('/shop')
 
     }
-}
+})
 
-exports.getRemoveAddress = async (req, res) => {
+exports.getRemoveAddress = handleAsync(async (req, res) => {
     if (req.session.userLoggedIn) {
         const productId = req.params.id
         const { cartTotal } = req.params
@@ -1193,14 +1193,14 @@ exports.getRemoveAddress = async (req, res) => {
         res.redirect('/login')
     }
 
-}
+})
 
 exports.getUserLogout = (req, res) => {
     req.session.userLoggedIn = false
     res.redirect('/')
 }
 
-exports.postApplyCoupon = async (req, res) => {
+exports.postApplyCoupon = handleAsync(async (req, res) => {
     const { userId, couponCode } = req.body
     console.log(userId);
     console.log(couponCode);
@@ -1236,7 +1236,7 @@ exports.postApplyCoupon = async (req, res) => {
 
     }
 
-}
+})
 
 exports.getRemoveBanner = (req, res) => {
     const { id } = req.params
