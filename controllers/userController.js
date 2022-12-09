@@ -778,6 +778,7 @@ exports.postChangeProductQuantity = async (req, res) => {
 
 
 exports.postAddAddress = async (req, res) => {
+    const { cartTotal } = req.params
     console.log(req.body);
     const { name, address, zipCode, mobileNumber, alternateMobileNumber } = req.body
     const userId = req.session.loggedUserId
@@ -793,7 +794,7 @@ exports.postAddAddress = async (req, res) => {
             console.log("Address saved");
         })
     }
-    res.redirect('/selectAddressAndPayment')
+    res.redirect(`/selectAddressAndPayment/${cartTotal}`)
 }
 
 
@@ -927,7 +928,7 @@ exports.postOrderPlaced = async (req, res) => {
         await cartOfUserToClean[0].save().then(console.log("Cart cleaned"))
 
         if (req.body.payment === "cod") {
-            res.json({ paymentType: "cod"})
+            res.json({ paymentType: "cod" })
         } else if (req.body.payment === "online") {
 
             let orderIdInString = orderId.toString()
@@ -948,7 +949,7 @@ exports.postOrderPlaced = async (req, res) => {
                     // }
                 }, (err, order) => {
                     console.log(order);
-                    res.json({ paymentType: "onlinePayment"})
+                    res.json({ paymentType: "onlinePayment" })
                 })
             }
             generateRazorpay()
@@ -1173,6 +1174,7 @@ exports.getAddToCartFromWishlist = async (req, res) => {
 exports.getRemoveAddress = async (req, res) => {
     if (req.session.userLoggedIn) {
         const productId = req.params.id
+        const { cartTotal } = req.params
         const userId = req.session.loggedUserId
 
         const user = await User.findById(userId)
@@ -1181,14 +1183,21 @@ exports.getRemoveAddress = async (req, res) => {
         console.log(user);
         console.log(addressIndexToRemove);
         if (addressIndexToRemove > -1) {
-            let addressToClean = user.address.splice(addressIndexToRemove, 1)
+            console.log("dasdas");
+            // let addressToClean = 
+            user.address.splice(addressIndexToRemove, 1)
         }
         await user.save().then(console.log("Address removed"))
-        res.redirect('/selectAddressAndPayment')
+        res.redirect(`/selectAddressAndPayment/${cartTotal}`)
     } else {
         res.redirect('/login')
     }
 
+}
+
+exports.getUserLogout = (req, res) => {
+    req.session.userLoggedIn = false
+    res.redirect('/')
 }
 
 exports.postApplyCoupon = async (req, res) => {
@@ -1227,4 +1236,18 @@ exports.postApplyCoupon = async (req, res) => {
 
     }
 
+}
+
+exports.getRemoveBanner = (req, res) => {
+    const { id } = req.params
+    Banner.findByIdAndRemove(id, (err, result) => {
+
+        if (err) {
+            console.log(err);
+        } else if (result) {
+            console.log("Removed", result);
+        }
+    })
+    // console.log(id);
+    res.redirect('/admin/addBanner')
 }

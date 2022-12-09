@@ -6,7 +6,7 @@
         <%- include('../userIncludes/nav') %>
             <section class="h-100 gradient-custom" style="min-height: 80vh;">
                 <div class="container py-5">
-                    <form action="/testing" method="post" id="checkout-form">
+                    <form action="/" method="post" id="checkout-form">
 
                         <div class="row d-flex justify-content-center my-4">
 
@@ -37,8 +37,8 @@
                                                     </label>
                                                 </div>
                                                 <div>
-                                                    <a href="/removeAddress/<%=address  ._id%>" class="text-danger"><i
-                                                            class="fas fa-trash fa-lg"></i></a>
+                                                    <a href="/removeAddress/<%=address  ._id%>/<%= cartTotal %>"
+                                                        class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
                                                 </div>
 
                                             </div>
@@ -163,7 +163,7 @@
                     <div class="card rounded-3 mb-4 mx-3" id="addingAddressForm">
                         <div class="card-body p-4">
 
-                            <form action="/addAddress" method="post">
+                            <form action="/addAddress/<%= cartTotal %>" method="post">
 
                                 <div class="row mb-4">
                                     <div class="col">

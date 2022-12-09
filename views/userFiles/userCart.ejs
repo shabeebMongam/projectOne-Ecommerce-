@@ -101,7 +101,7 @@
                         <div class="col-md-8">
                             <div class="card mb-4">
                                 <div class="card-header py-3 mb-3">
-                                    <h5 class="mb-0">Cart (Number of Items)</h5>
+                                    <h5 class="mb-0">Cart Items</h5>
                                 </div>
 
                                 <% let totalPrice=0 %>
@@ -139,26 +139,29 @@
                                                             product.productPrice) %>
                                                             <div class="">
                                                                 <div class="d-flex " style="height: 30px;">
-                                                                  <%     if(product.productQuantity === 1){%>
-                                                                        <button class="px-2 my-auto " id="negativeBtn" style="visibility: hidden ;"
-                                                                        onclick="changeQuantity('<%=cartOfUser.userId %>','<%= product.productId %>',-1,'<%=totalPrice%>')">
-                                                                        -
-                                                                    </button>
-                                                                 <%      }else{%>
-                                                                        <button class="px-2 my-auto " id="negativeBtn" style="visibility: block ;"
-                                                                        onclick="changeQuantity('<%=cartOfUser.userId %>','<%= product.productId %>',-1,'<%=totalPrice%>')">
-                                                                        -
-                                                                    </button>
-                                                                   <%    }%>
-                                                                  
-                                                                    <p class="px-2 my-auto pb-1 border"
-                                                                        id="<%= product.productId %>_qty">
-                                                                        <%=product.productQuantity%>
-                                                                    </p>
-                                                                    <button class="px-2 my-auto"
-                                                                        onclick="changeQuantity('<%=cartOfUser.userId %>','<%= product.productId %>',1,'<%=totalPrice%>')">
-                                                                        +
-                                                                    </button>
+                                                                    <% if(product.productQuantity===1){%>
+                                                                        <button class="px-2 my-auto " id="negativeBtn"
+                                                                            style="visibility: hidden ;"
+                                                                            onclick="changeQuantity('<%=cartOfUser.userId %>','<%= product.productId %>',-1,'<%=totalPrice%>')">
+                                                                            -
+                                                                        </button>
+                                                                        <% }else{%>
+                                                                            <button class="px-2 my-auto "
+                                                                                id="negativeBtn"
+                                                                                style="visibility: block ;"
+                                                                                onclick="changeQuantity('<%=cartOfUser.userId %>','<%= product.productId %>',-1,'<%=totalPrice%>')">
+                                                                                -
+                                                                            </button>
+                                                                            <% }%>
+
+                                                                                <p class="px-2 my-auto pb-1 border"
+                                                                                    id="<%= product.productId %>_qty">
+                                                                                    <%=product.productQuantity%>
+                                                                                </p>
+                                                                                <button class="px-2 my-auto"
+                                                                                    onclick="changeQuantity('<%=cartOfUser.userId %>','<%= product.productId %>',1,'<%=totalPrice%>')">
+                                                                                    +
+                                                                                </button>
                                                                 </div>
 
                                                             </div>
@@ -248,7 +251,8 @@
                                         <!-- <input id="formTotalPrice" type="text" value="<%= totalPrice  %>"
                                             style="visibility:hidden;width:0px;height:0px" name="cartTotal"> -->
 
-                                            <button type="submit" class="text-light btn border bg-success">Proceed To Buy</button>
+                                        <button type="submit" class="text-light btn border bg-success">Proceed To
+                                            Buy</button>
                                     </form>
                                     <!-- </button> -->
                                 </div>
@@ -276,26 +280,26 @@
                 <script>
                     function changeQuantity(userId, productId, count, total) {
                         let formDataTosend = document.getElementById("formTotalPrice")
-                       
+
                         let totalPrice = document.getElementById("allTotal")
                         let quantity = document.getElementById(productId + '_qty')
                         // alert(quantity)
                         console.log(quantity.innerHTML);
-                        console.log(typeof(quantity.innerHTML));
+                        console.log(typeof (quantity.innerHTML));
                         let tPrice = document.getElementById(productId + '_total')
                         let tPriceBeforeIncrement = tPrice.innerHTML
 
-                        if ( parseInt(quantity.innerHTML) === 2 && count == -1 ){
-                           console.log( document.getElementById("negativeBtn"));
-                           
-                           document.getElementById("negativeBtn" ).setAttribute("style","visibility: hidden")
-                           
-                        //    document.getElementById("negativeBtn").setAttribute("disabled" , true)
-                        }else{
-                            document.getElementById("negativeBtn").setAttribute("style","visibility: block")
+                        if (parseInt(quantity.innerHTML) === 2 && count == -1) {
+                            console.log(document.getElementById("negativeBtn"));
+
+                            document.getElementById("negativeBtn").setAttribute("style", "visibility: hidden")
+
+                            //    document.getElementById("negativeBtn").setAttribute("disabled" , true)
+                        } else {
+                            document.getElementById("negativeBtn").setAttribute("style", "visibility: block")
                             // document.getElementById("negativeBtn").setAttribute("disabled" , false)
                         }
-                     
+
 
 
 

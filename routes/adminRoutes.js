@@ -23,7 +23,7 @@ const upload = multer({
 })
 
 
-router.route('/').get(isAdminLoggedIn, getAdminLogin).post(postAdminLogin)
+router.route('/').get(getAdminLogin).post(postAdminLogin)
 router.route('/showDashboard').get(isAdminLoggedIn, getAdminDashboard)
 router.route('/showUsers').get(isAdminLoggedIn, getAdminUsers)
 router.route('/blockUser/:id').get(isAdminLoggedIn, getUserBlock)
@@ -36,10 +36,10 @@ router.route('/editProduct/:id').get(isAdminLoggedIn, getEditProduct).post(uploa
 router.route('/deleteProduct/:id').post(isAdminLoggedIn, postDeleteProduct)
 router.route('/addBanner').get(isAdminLoggedIn, getAddBanner).post(upload.single('bannerImage'), postAddBanner)
 router.route('/addCategory').post(upload.single('categoryImage'), postAddCategory)
-router.route('/showOrder').get(getShowOrders)
-router.route('/showCoupon').get(getShowCoupon)
-router.route('/showOrderDetailes/:userId/:orderId').get(getDetailsOfEachOrders)
-router.post('/addCoupon', postAddCoupon)
+router.route('/showOrder').get(isAdminLoggedIn, getShowOrders)
+router.route('/showCoupon').get(isAdminLoggedIn, getShowCoupon)
+router.route('/showOrderDetailes/:userId/:orderId').get(isAdminLoggedIn, getDetailsOfEachOrders)
+router.post('/addCoupon', isAdminLoggedIn, postAddCoupon)
 
 
 module.exports = router

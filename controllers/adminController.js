@@ -14,7 +14,12 @@ var ObjectId = require('mongodb').ObjectID;
 
 
 exports.getAdminLogin = (req, res) => {
-    res.render('adminFiles/adminLogin')
+    if (req.session.adminLoggedIn) {
+        res.redirect('/admin/showDashboard')
+    } else {
+        res.render('adminFiles/adminLogin')
+    }
+
 }
 
 exports.getAdminDashboard = async (req, res, next) => {
@@ -216,31 +221,8 @@ exports.postDeleteProduct = handleAsync(async (req, res) => {
     res.redirect('/admin/showProducts')
 })
 
-exports.getShowOrders = async (req, res) => {
+exports.getShowOrders = handleAsync(async (req, res) => {
 
-
-
-    // const allOrdersOfUsers = await Order.find({})
-
-    // console.log(allOrdersOfUsers);
-    // console.log(allOrdersOfUsers[0]);
-
-    // allOrdersOfUsers.forEach(user=>{
-    //     console.log(user.reverse());
-    // })  orders[0].orderedDate.reverse());
-
-
-
-
-    // const allOrdersOfUsers = await Order.aggregate([
-    //     {
-    //       '$unwind': {
-    //         'path': '$orders'
-    //       }
-    //     }
-    //   ])
-
-    //   console.log(allOrdersOfUsers);
     const allOrdersOfUsers = await Order.aggregate([
         {
             '$unwind': {
@@ -251,11 +233,7 @@ exports.getShowOrders = async (req, res) => {
                 'orders.orderedDate': -1
             }
         },
-        // {
-        //     $unwind:{
-        //         path:'$orders.products'
-        //     }
-        // }
+
 
     ])
 
@@ -265,22 +243,26 @@ exports.getShowOrders = async (req, res) => {
     // console.log(allOrdersOfUsers[0]);
 
     res.render('adminFiles/showOrders', { dashboard: false, users: false, products: false, category: false, banner: false, order: true, coupon: false, allOrdersOfUsers })
-}
-exports.getShowCoupon = async (req, res) => {
+})
+
+
+
+
+exports.getShowCoupon = handleAsync(async (req, res) => {
 
     const allCoupons = await Coupon.find({})
     console.log(allCoupons);
 
 
     res.render('adminFiles/addAndShowCoupons', { dashboard: false, users: false, products: false, category: false, banner: false, order: false, coupon: true, allCoupons })
-}
+})
 
 exports.getLogOut = (req, res) => {
     req.session.adminLoggedIn = false
     res.redirect('/admin')
 }
 
-exports.getDetailsOfEachOrders = async (req, res) => {
+exports.getDetailsOfEachOrders = handleAsync(async (req, res) => {
 
     const userId = req.params.userId
     const orderId = req.params.orderId
@@ -333,7 +315,7 @@ exports.getDetailsOfEachOrders = async (req, res) => {
     console.log(orderStatusToDisplay);
 
     res.render('adminFiles/showDetailesOfEachOrders', { dashboard: false, users: false, products: false, category: false, banner: false, order: true, coupon: false, orderToDisplay, userIdOfTheUser, orderStatusToDisplay })
-}
+})
 
 
 

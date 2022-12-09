@@ -11,7 +11,7 @@ const { validatingUserRegisterPartOne, validatingUserRegisterPartTwo } = require
 const { validatingUserLoginPartOne, validatingUserLoginPartTwo } = require('../middleware/validation/userLogin');
 const Product = require('../models/productModel');
 const Cart = require('../models/cartModel');
-const { getMainPage, getShop, getRegister, getLogin, getOtpVerify, getShopingSingle, getCart, getSelectAddressAndPayment, getProfile, getRemoveItemFromCart, getOrders, getOrderPlacedStatus, getWishlist, getAbout, postUpdateOrderStatus, getFilterByCategory, postRegister, postVerifyOtp, postLogin, postAddToCArt, postChangeProductQuantity, postAddAddress, postOrderPlaced, postWishList, postVerifyPayment, getEditProfile, postEditProfile, getAddToCartFromWishlist, getRemoveAddress, getRemoveItemFromWishlist, postApplyCoupon, getUserLogout } = require('../controllers/userController');
+const { getMainPage, getShop, getRegister, getLogin, getOtpVerify, getShopingSingle, getCart, getSelectAddressAndPayment, getProfile, getRemoveItemFromCart, getOrders, getOrderPlacedStatus, getWishlist, getAbout, postUpdateOrderStatus, getFilterByCategory, postRegister, postVerifyOtp, postLogin, postAddToCArt, postChangeProductQuantity, postAddAddress, postOrderPlaced, postWishList, postVerifyPayment, getEditProfile, postEditProfile, getAddToCartFromWishlist, getRemoveAddress, getRemoveItemFromWishlist, postApplyCoupon, getUserLogout, getRemoveBanner } = require('../controllers/userController');
 const Banner = require('../models/bannerModel');
 const Order = require('../models/orderModel');
 const Wishlist = require('../models/wishlistModel');
@@ -41,18 +41,19 @@ router.route('/about').get(getAbout)
 router.route('/filterByCategory/:categoryId').get(getFilterByCategory)
 router.route('/addToCart/:id').post(postAddToCArt)
 router.route('/changeProductQuantity').post(postChangeProductQuantity)
-router.route('/addAddress').post(postAddAddress)
+router.route('/addAddress/:cartTotal').post(postAddAddress)
 router.route('/selectAddressAndPayment/:total').get(getSelectAddressAndPayment)
 router.route('/orderPlaced').post(postOrderPlaced)
 router.route('/wishlist/:id').post(postWishList)
 router.route('/verifyPayment').post(postVerifyPayment)
 router.route('/editProfile').get(getEditProfile).post(postEditProfile)
 router.route('/addToCartFromWishlist/:id').get(getAddToCartFromWishlist)
-router.route('/removeAddress/:id').get(getRemoveAddress)
+router.route('/removeAddress/:id/:cartTotal').get(getRemoveAddress)
 router.route('/updateOrderStatus/:userId/:orderId').post(postUpdateOrderStatus)
 router.route('/register').post(validatingUserRegisterPartOne, validatingUserRegisterPartTwo, postRegister)
 router.route('/applyCoupon').post(postApplyCoupon)
-// router.route('/logout').get(getUserLogout)
+router.route('/logout').get(getUserLogout)
+router.route('/removeBanner/:id').get(getRemoveBanner)
 
 
 
